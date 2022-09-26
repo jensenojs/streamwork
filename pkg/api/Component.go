@@ -6,7 +6,7 @@ package api
 type Component struct {
 	name string
 	// The stream object is used to connect the downstream operators.
-	outgoingStream Stream
+	outgoingStream *Stream
 }
  
 func NewComponent(name string) *Component {
@@ -25,6 +25,6 @@ func (c *Component) GetName() string {
  * Get the outgoing event stream of this component. The stream is used to connect
  * the downstream components.
  */
-func (c *Component) GetOutgoingStream() Stream {
+func (c *Component) GetOutgoingStream() *Stream {
 	return c.outgoingStream
 }
