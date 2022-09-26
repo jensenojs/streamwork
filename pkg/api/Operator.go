@@ -1,5 +1,8 @@
 package api
 
+/**
+ * This Operator class is the base class for all user defined operators.
+ */
 type Operator struct {
 	Component
 }
