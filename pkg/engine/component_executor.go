@@ -6,8 +6,6 @@ import "streamwork/pkg/api"
  * The base class for executors of source and operator.
  */
 type ComponentExecutor interface {
-	GetComponent() api.Component
-
 	SetIncomingQueue(i EventQueue)
 
 	SetOutgoingQueue(i EventQueue)
@@ -17,25 +15,26 @@ type ComponentExecutor interface {
  * 	used to Inherited by operator_executor and source_executor
  */
 type componentExecutor struct {
-	component      api.Component
+	name           string
+	stream         *api.Stream
 	fn             func()
 	eventCollector []api.Event // accept events from user logic
 	incomingQueue  EventQueue  // for upstream processes
 	outgoingQueue  EventQueue  // for downstream processes
 }
 
-func NewComponentExecutor(component api.Component) *componentExecutor {
-	return &componentExecutor{
-		component: component,
-	}
+// =================================================================
+// implement for Component
+func (c *componentExecutor) GetName() string {
+	return c.name
+}
+
+func (c *componentExecutor) GetOutgoingStream() *api.Stream {
+	return c.stream
 }
 
 // =================================================================
 // implement for ComponentExecutor
-func (c *componentExecutor) GetComponent() api.Component {
-	return c.component
-}
-
 func (c *componentExecutor) SetIncomingQueue(i EventQueue) {
 	c.incomingQueue = i
 }

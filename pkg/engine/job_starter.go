@@ -31,43 +31,48 @@ func (j *JobStarter) Start() error {
 	return nil
 }
 
+// =================================================================
+// setupComponentExecutors and helper functions
 func (j *JobStarter) setupComponentExecutors() {
 	// start from sources in the job and traverse components to create executors
-	for s := range j.job.GetSources() {
-		e := NewSourceExecutor(s)
+	for source := range j.job.GetSources() {
+		sourceExecutor := NewSourceExecutor(source)
 		// for each source, traverse the operations connected to it
-		j.executorList = append(j.executorList, e)
-		j.traverseComponent(s, e)
+		j.executorList = append(j.executorList, sourceExecutor)
+		j.traverseComponent(source, sourceExecutor) // traverse begin with upstream
 	}
 }
 
-func (j *JobStarter) traverseComponent(component api.Component, excecutor ComponentExecutor) {
-	s := component.GetOutgoingStream()
-
-	for o := range s.GetAppliedOperators() {
-		oe := NewOperatorExecutor(o)
-		j.executorList = append(j.executorList, oe)
-		j.connectionList = append(j.connectionList, NewConnection(excecutor, *oe))
+func (j *JobStarter) traverseComponent(from api.Component, fromExecutor ComponentExecutor) {
+	downstream := from.GetOutgoingStream()
+	// get the operators apply on upstream components
+	for to := range downstream.GetAppliedOperators() {
+		toExecutor := NewOperatorExecutor(to)
+		j.executorList = append(j.executorList, toExecutor)
+		j.connectionList = append(j.connectionList, NewConnection(fromExecutor, toExecutor))
 		// setup executors for the downstream operators
-		j.traverseComponent(o, oe)
+		j.traverseComponent(to, toExecutor)
 	}
 }
 
+// =================================================================
+// setupConnections and helper function
 func (j *JobStarter) setupConnections() {
 	for _, c := range j.connectionList {
-		j.connectExecutors(*c)
+		j.connectExecutors(c)
 	}
 }
 
 // It is a newly connected operator executor. Note that in this version, there is no
 // shared "from" component and "to" component. The job looks like a single linked list.
-func (j *JobStarter) connectExecutors(connection Connection) {
+func (j *JobStarter) connectExecutors(connection *Connection) {
 	intermediateQueue := NewEventQueue(j.queue_size)
 	connection.from.SetOutgoingQueue(*intermediateQueue)
 	connection.to.SetIncomingQueue(*intermediateQueue)
 }
 
-// start all the processes for this job
+// =================================================================
+// start all the processes for this job and helper function
 func (j *JobStarter) startProcesses() {
 	j.reverseExecutorList()
 	for _, e := range j.executorList {
