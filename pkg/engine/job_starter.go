@@ -30,16 +30,17 @@ func (j *JobStarter) Start() error {
 func (j *JobStarter) SetupComponentExecutor() {
 	// start from sources in the job and traverse components to create executors
 	for s := range j.job.GetSources() {
-		se := NewSourceExecutor(s)
-		j.executorList = append(j.executorList, se)
-		
+		e := NewSourceExecutor(s)
+		// for each source, traverse the operations connected to it
+		j.executorList = append(j.executorList, e)
+		j.traverseComponent(s, e)	
 	}
 }
 
-func (j *JobStarter) traverseComponent(component api.Component, excecutor componentExecutor) {
-	// stream := component.GetOutgoingStream()
+func (j *JobStarter) traverseComponent(component api.Component, excecutor ComponentExecutor) {
+	// s := component.GetOutgoingStream()
 
-	// for op := stream.GetAppliedOperators() {
-
+	// for o, _ := range s.GetAppliedOperators() {
+	// 	e := NewOperatorExecutor(o)
 	// }
 }

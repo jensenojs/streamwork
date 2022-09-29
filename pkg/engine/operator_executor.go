@@ -1,6 +1,7 @@
 package engine
 
 import "streamwork/pkg/api"
+
 /**
  * The executor for operator components. When the executor is started, a new thread
  * is created to call the apply() function of the operator component repeatedly.

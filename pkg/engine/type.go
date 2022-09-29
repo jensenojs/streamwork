@@ -21,7 +21,7 @@ type Process interface {
  * The base class for executors of source and operator.
  */
 type ComponentExecutor interface {
-	GetComponent() api.Componentimpl
+	GetComponent() api.Component
 
 	SetIncomingQueue(i EventQueue)
 

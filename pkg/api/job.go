@@ -2,6 +2,10 @@ package api
 
 import "errors"
 
+type void struct{}
+
+var member void
+
 /**
  * The Job class is used by users to set up their jobs and run.
  * Example:
@@ -11,13 +15,13 @@ import "errors"
  */
 type Job struct {
 	name      string
-	sourceSet map[Source]bool
+	sourceSet map[Source]void
 }
 
 func NewJob(name string) *Job {
 	return &Job{
 		name:      name,
-		sourceSet: make(map[Source]bool),
+		sourceSet: make(map[Source]void),
 	}
 }
 
@@ -29,7 +33,7 @@ func (j *Job) GetName() string {
  * Get the list sources in this job. This function is used by JobRunner to traverse the graph.
  * @return The list of sources in this job
  */
-func (j *Job) GetSources() map[Source]bool {
+func (j *Job) GetSources() map[Source]void {
 	return j.sourceSet
 }
 
@@ -44,6 +48,6 @@ func (j *Job) AddSource(source Source) (stream *Stream, err error) {
 		err = errors.New("Source" + source.GetName() + " already exists")
 		return
 	}
-	j.sourceSet[source] = true
+	j.sourceSet[source] = member
 	return source.GetOutgoingStream(), nil
 }

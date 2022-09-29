@@ -11,12 +11,12 @@ import "errors"
  *      .applyOperator(myOperator);
  */
 type Stream struct {
-	operatorSet map[Operator]bool
+	operatorSet map[Operator]void
 }
 
 func NewStream() *Stream {
 	return &Stream{
-		operatorSet: make(map[Operator]bool),
+		operatorSet: make(map[Operator]void),
 	}
 }
 
@@ -30,10 +30,10 @@ func (s *Stream) ApplyOperator(op Operator) (stream *Stream, err error) {
 		err = errors.New("Operator " + op.GetName() + " already exists")
 		return
 	}
-	s.operatorSet[op] = true
+	s.operatorSet[op] = member
 	return op.GetOutgoingStream(), nil
 }
 
-func (s *Stream) GetAppliedOperators() map[Operator]bool {
+func (s *Stream) GetAppliedOperators() map[Operator]void {
 	return s.operatorSet
 }
