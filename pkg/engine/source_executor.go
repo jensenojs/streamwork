@@ -4,18 +4,26 @@ import "streamwork/pkg/api"
 
 type SourceExecutor struct {
 	componentExecutor
-	source api.Source
+	s api.Source
 }
 
 func NewSourceExecutor(s api.Source) *SourceExecutor {
 	return &SourceExecutor{
-		source: s,
+		s: s,
 	}
 }
 
 func (s *SourceExecutor) runOnce() bool {
-	
-	return false
+	// generate events
+	if s.s.GetEvents(s.eventCollector) != nil {
+		return false
+	}
+
+	// emit out
+	for _, e := range s.eventCollector {
+		s.sendOutgoingEvent(e)
+	}
+	return true
 }
 
 func (s *SourceExecutor) SetIncomingQueue(i EventQueue) {

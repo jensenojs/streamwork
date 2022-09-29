@@ -8,15 +8,33 @@ import "streamwork/pkg/api"
  */
 type OperatorExecutor struct {
 	componentExecutor
-	operator api.Operator
+	op api.Operator
 }
 
-func NewOperatorExecutor(op api.Operator) *OperatorExecutor {
+func NewOperatorExecutor(o api.Operator) *OperatorExecutor {
 	return &OperatorExecutor{
-		operator: op,
+		op: o,
 	}
 }
 
-func (e *OperatorExecutor) runOnce() bool {
-	return false
+/* Run process once.
+ * @return true if the thread should continue; false if the thread should exist.
+ */
+func (o *OperatorExecutor) runOnce() bool {
+	// read input
+	event := o.takeIncomingEvent()
+	if event == nil {
+		return false
+	}
+
+	// apply operatorion
+	o.op.Apply(event, o.eventCollector)
+
+	// emit out : should work.?
+	for _, e := range o.eventCollector {
+		o.sendOutgoingEvent(e)
+	}
+	o.eventCollector = nil
+
+	return true
 }
