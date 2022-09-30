@@ -2,6 +2,11 @@ package engine
 
 import "streamwork/pkg/api"
 
+/**
+ * The executor for source components. When the executor is started,
+ * a new thread is created to call the getEvents() function of
+ * the source component repeatedly.
+ */
 type SourceExecutor struct {
 	componentExecutor
 	s api.Source
