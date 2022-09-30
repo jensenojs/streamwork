@@ -6,6 +6,8 @@ import "streamwork/pkg/api"
  * The base class for executors of source and operator.
  */
 type ComponentExecutor interface {
+	api.Component
+
 	SetIncomingQueue(i *EventQueue)
 
 	SetOutgoingQueue(i *EventQueue)

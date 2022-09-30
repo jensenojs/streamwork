@@ -9,18 +9,21 @@ import "streamwork/pkg/api"
  */
 type SourceExecutor struct {
 	componentExecutor
-	s api.Source
 }
 
 func NewSourceExecutor(s api.Source) *SourceExecutor {
 	return &SourceExecutor{
-		s: s,
+		// s: s,
 	}
+}
+
+func (s *SourceExecutor) GetEvents([]api.Event) error {
+	panic("Need to be implemented by specific source")
 }
 
 func (s *SourceExecutor) runOnce() bool {
 	// generate events
-	if s.s.GetEvents(s.eventCollector) != nil {
+	if s.GetEvents(s.eventCollector) != nil {
 		return false
 	}
 

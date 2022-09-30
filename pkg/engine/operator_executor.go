@@ -8,13 +8,16 @@ import "streamwork/pkg/api"
  */
 type OperatorExecutor struct {
 	componentExecutor
-	op api.Operator
 }
 
 func NewOperatorExecutor(o api.Operator) *OperatorExecutor {
 	return &OperatorExecutor{
-		op: o,
+		// op: o,
 	}
+}
+
+func (o *OperatorExecutor) Apply(api.Event, []api.Event) error {
+	panic("Need to be implemented by specific operator")
 }
 
 /* Run process once.
@@ -28,7 +31,7 @@ func (o *OperatorExecutor) runOnce() bool {
 	}
 
 	// apply operatorion
-	o.op.Apply(event, o.eventCollector)
+	o.Apply(event, o.eventCollector)
 
 	// emit out : should work.?
 	for _, e := range o.eventCollector {
