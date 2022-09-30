@@ -26,6 +26,6 @@ func (s *SourceExecutor) runOnce() bool {
 	return true
 }
 
-func (s *SourceExecutor) SetIncomingQueue(i EventQueue) {
+func (s *SourceExecutor) SetIncomingQueue(i *EventQueue) {
 	panic("No incoming queue is allowed for source executor")
 }

@@ -67,8 +67,8 @@ func (j *JobStarter) setupConnections() {
 // shared "from" component and "to" component. The job looks like a single linked list.
 func (j *JobStarter) connectExecutors(connection *Connection) {
 	intermediateQueue := NewEventQueue(j.queue_size)
-	connection.from.SetOutgoingQueue(*intermediateQueue)
-	connection.to.SetIncomingQueue(*intermediateQueue)
+	connection.from.SetOutgoingQueue(intermediateQueue)
+	connection.to.SetIncomingQueue(intermediateQueue)
 }
 
 // =================================================================
