@@ -13,7 +13,8 @@ type SourceExecutor struct {
 	ComponentExecutorImpl
 }
 
-func NewSourceExecutor(s api.Source) *SourceExecutor {
+// only used in job_starter
+func newSourceExecutor(s api.Source) *SourceExecutor {
 	// needs to set or read fields by func
 	return &SourceExecutor{}
 }

@@ -9,16 +9,18 @@ import (
 type SensorReader struct {
 	engine.SourceExecutor
 
-	reader bytes.Buffer
+	reader bytes.Reader
 }
 
 func NewSensorReader(name string, port int) *SensorReader {
 	var s = &SensorReader{}
 	s.Init(name) // where is port?
+	s.setupSocketReader(port)
 	return s
 }
 
 func (s *SensorReader) GetEvents(eventCollector []api.Event) error {
+	// vehicle := 
 	return nil
 }
 

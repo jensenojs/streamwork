@@ -36,7 +36,7 @@ func (j *JobStarter) Start() error {
 func (j *JobStarter) setupComponentExecutors() {
 	// start from sources in the job and traverse components to create executors
 	for source := range j.job.GetSources() {
-		sourceExecutor := NewSourceExecutor(source)
+		sourceExecutor := newSourceExecutor(source)
 		// for each source, traverse the operations connected to it
 		j.executorList = append(j.executorList, sourceExecutor)
 		j.traverseComponent(source, sourceExecutor) // traverse begin with upstream
@@ -47,7 +47,7 @@ func (j *JobStarter) traverseComponent(from api.Component, fromExecutor Componen
 	downstream := from.GetOutgoingStream()
 	// get the operators apply on upstream components
 	for to := range downstream.GetAppliedOperators() {
-		toExecutor := NewOperatorExecutor(to)
+		toExecutor := newOperatorExecutor(to)
 		j.executorList = append(j.executorList, toExecutor)
 		j.connectionList = append(j.connectionList, NewConnection(fromExecutor, toExecutor))
 		// setup executors for the downstream operators

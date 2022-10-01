@@ -12,7 +12,8 @@ type OperatorExecutor struct {
 	ComponentExecutorImpl
 }
 
-func NewOperatorExecutor(o api.Operator) *OperatorExecutor {
+// only used in job_starter
+func newOperatorExecutor(o api.Operator) *OperatorExecutor {
 	// needs to set or read fields by func
 	return &OperatorExecutor{}
 }
