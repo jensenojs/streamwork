@@ -13,10 +13,9 @@ type SensorReader struct {
 }
 
 func NewSensorReader(name string, port int) *SensorReader {
-	return &SensorReader{
-		name : name,
-	}
-	return nil
+	var s = &SensorReader{}
+	s.Init(name) // where is port?
+	return s
 }
 
 func (s *SensorReader) GetEvents(eventCollector []api.Event) error {

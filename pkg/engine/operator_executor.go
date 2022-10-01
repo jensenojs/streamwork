@@ -5,16 +5,18 @@ import "streamwork/pkg/api"
 /**
  * The executor for operator components. When the executor is started, a new thread
  * is created to call the apply() function of the operator component repeatedly.
+ * 
+ * Used to inherited by specific operator
  */
 type OperatorExecutor struct {
-	componentExecutor
+	ComponentExecutorImpl
 }
 
 func NewOperatorExecutor(o api.Operator) *OperatorExecutor {
-	return &OperatorExecutor{
-		// op: o,
-	}
+	// needs to set or read fields by func
+	return &OperatorExecutor{}
 }
+
 
 func (o *OperatorExecutor) Apply(api.Event, []api.Event) error {
 	panic("Need to be implemented by specific operator")

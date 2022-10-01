@@ -14,9 +14,9 @@ type ComponentExecutor interface {
 }
 
 /**
- * 	used to Inherited by operator_executor and source_executor
+ * 	used to Inherited by OperatorExecutor and SourceExecutor
  */
-type componentExecutor struct {
+type ComponentExecutorImpl struct {
 	name           string
 	fn             func()
 	eventCollector []api.Event // accept events from user logic
@@ -27,27 +27,56 @@ type componentExecutor struct {
 
 // =================================================================
 // implement for Component
-func (c *componentExecutor) GetName() string {
+func (c *ComponentExecutorImpl) SetName(name string) { // Use Init to instead
+	c.name = name
+}
+
+func (c *ComponentExecutorImpl) GetName() string {
 	return c.name
 }
 
-func (c *componentExecutor) GetOutgoingStream() *api.Stream {
+func (c *ComponentExecutorImpl) SetOutgoingStream() { // Use Init to instead
+	if c.stream == nil {
+		c.stream = api.NewStream()
+	}
+}
+
+func (c *ComponentExecutorImpl) GetOutgoingStream() *api.Stream {
 	return c.stream
+}
+
+// helper function to init a component executor, trying to not use SetName or SetOutgoingStream
+func (c *ComponentExecutorImpl) Init(name string) {
+	c.SetName(name)
+	c.SetOutgoingStream()
 }
 
 // =================================================================
 // implement for ComponentExecutor
-func (c *componentExecutor) SetIncomingQueue(i *EventQueue) {
+func (c *ComponentExecutorImpl) SetIncomingQueue(i *EventQueue) {
 	c.incomingQueue = i
 }
 
-func (c *componentExecutor) SetOutgoingQueue(o *EventQueue) {
+func (c *ComponentExecutorImpl) SetOutgoingQueue(o *EventQueue) {
 	c.outgoingQueue = o
+}
+
+// helper functions to receive/send events
+func (c *ComponentExecutorImpl) takeIncomingEvent() api.Event {
+	e, ok := <-c.incomingQueue.queue
+	if ok {
+		return e
+	}
+	return nil
+}
+
+func (c *ComponentExecutorImpl) sendOutgoingEvent(event api.Event) {
+	c.outgoingQueue.queue <- event
 }
 
 // =================================================================
 // implement for Process
-func (c *componentExecutor) Process() {
+func (c *ComponentExecutorImpl) Process() {
 	c.fn = func() {
 		go func() {
 			for {
@@ -57,24 +86,10 @@ func (c *componentExecutor) Process() {
 	}
 }
 
-func (c *componentExecutor) Start() {
+func (c *ComponentExecutorImpl) Start() {
 	go c.fn()
 }
 
-func (c *componentExecutor) runOnce() bool {
+func (c *ComponentExecutorImpl) runOnce() bool {
 	panic("Need to implement runOnce")
-}
-
-// =================================================================
-// some addtional helper functions
-func (c *componentExecutor) takeIncomingEvent() api.Event {
-	e, ok := <-c.incomingQueue.queue
-	if ok {
-		return e
-	}
-	return nil
-}
-
-func (c *componentExecutor) sendOutgoingEvent(event api.Event) {
-	c.outgoingQueue.queue <- event
 }

@@ -32,7 +32,7 @@ func (j *JobStarter) Start() error {
 }
 
 // =================================================================
-// setupComponentExecutors and helper functions
+// setup ComponentExecutors and helper functions
 func (j *JobStarter) setupComponentExecutors() {
 	// start from sources in the job and traverse components to create executors
 	for source := range j.job.GetSources() {
@@ -76,7 +76,7 @@ func (j *JobStarter) connectExecutors(connection *Connection) {
 func (j *JobStarter) startProcesses() {
 	j.reverseExecutorList()
 	for _, e := range j.executorList {
-		e.(*componentExecutor).Start()
+		e.(Process).Start()
 	}
 }
 

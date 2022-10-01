@@ -6,15 +6,16 @@ import "streamwork/pkg/api"
  * The executor for source components. When the executor is started,
  * a new thread is created to call the getEvents() function of
  * the source component repeatedly.
+ *
+ * Used to inherited by specific operator
  */
 type SourceExecutor struct {
-	componentExecutor
+	ComponentExecutorImpl
 }
 
 func NewSourceExecutor(s api.Source) *SourceExecutor {
-	return &SourceExecutor{
-		// s: s,
-	}
+	// needs to set or read fields by func
+	return &SourceExecutor{}
 }
 
 func (s *SourceExecutor) GetEvents([]api.Event) error {
