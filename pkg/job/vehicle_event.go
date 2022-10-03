@@ -6,7 +6,7 @@ type VehicleEvent struct {
 	Type carType
 }
 
-func NewEventQueue(Type string) *VehicleEvent {
+func NewVehicleEvent(Type string) *VehicleEvent {
 	return &VehicleEvent{
 		Type : Type,
 	}

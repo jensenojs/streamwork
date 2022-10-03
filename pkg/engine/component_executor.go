@@ -27,7 +27,7 @@ type ComponentExecutorImpl struct {
 
 // =================================================================
 // implement for Component
-func (c *ComponentExecutorImpl) SetName(name string) { // Use Init to instead
+func (c *ComponentExecutorImpl) SetName(name string) { // Use InitNameAndStream to instead
 	c.name = name
 }
 
@@ -35,7 +35,7 @@ func (c *ComponentExecutorImpl) GetName() string {
 	return c.name
 }
 
-func (c *ComponentExecutorImpl) SetOutgoingStream() { // Use Init to instead
+func (c *ComponentExecutorImpl) SetOutgoingStream() { // Use InitNameAndStream to instead
 	if c.stream == nil {
 		c.stream = api.NewStream()
 	}
@@ -46,7 +46,7 @@ func (c *ComponentExecutorImpl) GetOutgoingStream() *api.Stream {
 }
 
 // helper function to init a component executor, trying to not use SetName or SetOutgoingStream
-func (c *ComponentExecutorImpl) Init(name string) {
+func (c *ComponentExecutorImpl) InitNameAndStream(name string) {
 	c.SetName(name)
 	c.SetOutgoingStream()
 }

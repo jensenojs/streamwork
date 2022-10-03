@@ -14,7 +14,7 @@ type VehicleCounter struct {
 
 func NewVehicleCounter(name string) *VehicleCounter {
 	var v = &VehicleCounter{}
-	v.Init(name)
+	v.InitNameAndStream(name)
 	return v
 }
 

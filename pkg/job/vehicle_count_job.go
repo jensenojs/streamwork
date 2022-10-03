@@ -1,5 +1,6 @@
 package job
 
-type VehicleCountJob struct {
+// see in main.go
+// type VehicleCountJob struct {
 
-}
+// }

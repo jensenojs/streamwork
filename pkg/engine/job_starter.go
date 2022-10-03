@@ -4,12 +4,12 @@ import "streamwork/pkg/api"
 
 type JobStarter struct {
 	queue_size     int
-	job            api.Job             // the job to start
+	job            *api.Job             // the job to start
 	executorList   []ComponentExecutor // list of executors
 	connectionList []*Connection       // connections between component executors
 }
 
-func NewJobStarter(job api.Job) *JobStarter {
+func NewJobStarter(job *api.Job) *JobStarter {
 	return &JobStarter{
 		queue_size: 64, // default queue size
 		job:        job,
