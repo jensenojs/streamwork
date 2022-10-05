@@ -19,6 +19,7 @@ type ComponentExecutor interface {
 type ComponentExecutorImpl struct {
 	name           string
 	fn             func()
+	runOnce        func() bool // source executor or operator executor, but run with their own GetEvents or Apply
 	eventCollector []api.Event // accept events from user logic
 	stream         *api.Stream
 	incomingQueue  *EventQueue // for upstream processes
@@ -76,13 +77,13 @@ func (c *ComponentExecutorImpl) sendOutgoingEvent(event api.Event) {
 
 // =================================================================
 // implement for Process
-func (c *ComponentExecutorImpl) Process() {
+func (c *ComponentExecutorImpl) newProcess() {
 	c.fn = func() {
-		go func() {
-			for {
-				c.runOnce()
+		for {
+			if ok := c.runOnce(); ok != true {
+				break
 			}
-		}()
+		}
 	}
 }
 
@@ -90,6 +91,6 @@ func (c *ComponentExecutorImpl) Start() {
 	go c.fn()
 }
 
-func (c *ComponentExecutorImpl) runOnce() bool {
-	panic("Need to implement runOnce")
+func (c *ComponentExecutorImpl) setRunOnce(runOnce func() bool) {
+	c.runOnce = runOnce
 }

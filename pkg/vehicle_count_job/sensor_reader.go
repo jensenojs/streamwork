@@ -1,12 +1,18 @@
-package job
+package vehicle_count_job
 
 import (
 	"fmt"
-	"io"
 	"net"
+	"os"
 	"strconv"
 	"streamwork/pkg/api"
 	"streamwork/pkg/engine"
+)
+
+const (
+	connHost = "localhost"
+	connType = "tcp"
+	connPort = "" // no use
 )
 
 type SensorReader struct {
@@ -23,26 +29,23 @@ func NewSensorReader(name string, port int64) *SensorReader {
 	return s
 }
 
-func (s *SensorReader) GetEvents(eventCollector []api.Event) {
+func (s *SensorReader) GetEvents(eventCollector *[]api.Event) {
 	buf := make([]byte, 1024)
 	num, err := s.conn.Read(buf)
 	if err != nil {
-		if err == io.EOF {
-			err = nil
-		} else {
-			panic(err)
-		}
+		// disconnecting from client, for now just exit
+		os.Exit(0)
 	}
-	vehicle := NewVehicleEvent(string(buf[:num]))
-	eventCollector = append(eventCollector, vehicle)
+	vehicle := NewVehicleEvent(string(buf[:num - 1])) // the last character is '\n', so just ignore it
+	*eventCollector = append(*eventCollector, vehicle)
 	fmt.Printf("SensorReader --> %s\n", vehicle.GetData())
 }
 
 func (s *SensorReader) setupSocketReader(port int64) {
 	fmt.Println("SensorReader begin to monitor")
-	var listener net.Listener
-	var err error
-	if listener, err = net.Listen("tcp", "localhost:"+strconv.FormatInt(port, 10)); err != nil {
+
+	listener, err := net.Listen(connType, connHost+":"+strconv.FormatInt(port, 10))
+	if err != nil {
 		panic(err)
 	}
 

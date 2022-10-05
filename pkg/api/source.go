@@ -11,5 +11,5 @@ type Source interface {
 	 * The function is abstract and needs to be implemented by users.
 	 * @param eventCollector The outgoing event collector
 	 */
-	GetEvents(eventCollector []Event)
+	GetEvents(eventCollector *[]Event)
 }

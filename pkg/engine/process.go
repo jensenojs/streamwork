@@ -6,7 +6,7 @@ package engine
  * Each process also have an incoming event queue and an outgoing event queue.
  */
 type Process interface {
-	Process()
+	newProcess()
 
 	// Start the process.
 	Start()

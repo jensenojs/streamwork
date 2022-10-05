@@ -4,7 +4,7 @@ import "streamwork/pkg/api"
 
 type JobStarter struct {
 	queue_size     int
-	job            *api.Job             // the job to start
+	job            *api.Job            // the job to start
 	executorList   []ComponentExecutor // list of executors
 	connectionList []*Connection       // connections between component executors
 }
@@ -16,7 +16,7 @@ func NewJobStarter(job *api.Job) *JobStarter {
 	}
 }
 
-func (j *JobStarter) Start() error {
+func (j *JobStarter) Start() {
 	// set up executors for all the components.
 	j.setupComponentExecutors()
 
@@ -27,8 +27,13 @@ func (j *JobStarter) Start() error {
 	j.startProcesses()
 
 	// start web server
-	//
-	return nil
+	// w := NewWebServer(j.job.GetName(), j.connectionList)
+	// w.Start()
+
+	for {
+
+	}
+
 }
 
 // =================================================================
@@ -76,6 +81,7 @@ func (j *JobStarter) connectExecutors(connection *Connection) {
 func (j *JobStarter) startProcesses() {
 	j.reverseExecutorList()
 	for _, e := range j.executorList {
+		e.(Process).newProcess()
 		e.(Process).Start()
 	}
 }

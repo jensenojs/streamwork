@@ -11,28 +11,36 @@ import "streamwork/pkg/api"
  */
 type SourceExecutor struct {
 	ComponentExecutorImpl
+	source api.Source
 }
 
-// only used in job_starter
 func newSourceExecutor(s api.Source) *SourceExecutor {
 	// needs to set or read fields by func
-	return &SourceExecutor{}
+	se := &SourceExecutor{
+		source: s,
+	}
+	se.setRunOnce(se.runOnce)
+	return se
 }
 
-func (s *SourceExecutor) GetEvents([]api.Event) error {
+func (s *SourceExecutor) GetEvents([]api.Event) {
 	panic("Need to be implemented by specific source")
 }
 
 func (s *SourceExecutor) runOnce() bool {
+	// get
+
 	// generate events
-	if s.GetEvents(s.eventCollector) != nil {
-		return false
-	}
+	s.source.GetEvents(&s.eventCollector)
 
 	// emit out
 	for _, e := range s.eventCollector {
 		s.sendOutgoingEvent(e)
 	}
+
+	// clean up event that executed
+	s.eventCollector = nil
+
 	return true
 }
 

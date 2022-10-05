@@ -2,7 +2,7 @@ package engine
 
 type Node = string
 
-type Edge = map[Node]Node
+type Edge = map[Node]Node // k-v : from-to
 
 type WebServer struct {
 	jobName   string
@@ -11,7 +11,8 @@ type WebServer struct {
 	edges     Edge
 }
 
-func NewWebServer(jobName string, connectionList []Connection) *WebServer {
+// No need for web server for now
+func NewWebServer(jobName string, connectionList []*Connection) *WebServer {
 	var w = &WebServer{
 		jobName: jobName,
 	}

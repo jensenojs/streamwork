@@ -12,5 +12,5 @@ type Operator interface {
 	 * @param event The incoming event
 	 * @param eventCollector The outgoing event collector
 	 */
-	Apply(Event, []Event) error
+	Apply(Event, *[]Event) error
 }

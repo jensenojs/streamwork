@@ -10,12 +10,16 @@ import "streamwork/pkg/api"
  */
 type OperatorExecutor struct {
 	ComponentExecutorImpl
+	operator api.Operator // specific operator, used to execute apply
 }
 
-// only used in job_starter
-func newOperatorExecutor(o api.Operator) *OperatorExecutor {
+func newOperatorExecutor(op api.Operator) *OperatorExecutor {
 	// needs to set or read fields by func
-	return &OperatorExecutor{}
+	oe := &OperatorExecutor{
+		operator : op,
+	}
+	oe.setRunOnce(oe.runOnce)
+	return oe
 }
 
 
@@ -34,12 +38,14 @@ func (o *OperatorExecutor) runOnce() bool {
 	}
 
 	// apply operatorion
-	o.Apply(event, o.eventCollector)
+	o.operator.Apply(event, &o.eventCollector)
 
 	// emit out : should work.?
 	for _, e := range o.eventCollector {
 		o.sendOutgoingEvent(e)
 	}
+
+	// clean up event that executed
 	o.eventCollector = nil
 
 	return true

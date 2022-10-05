@@ -1,4 +1,4 @@
-package job
+package vehicle_count_job
 
 type carType = string
 

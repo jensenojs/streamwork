@@ -4,17 +4,17 @@ import (
 	"fmt"
 	"streamwork/pkg/api"
 	"streamwork/pkg/engine"
-	"streamwork/pkg/job"
+	"streamwork/pkg/vehicle_count_job"
 )
 
 // vehicle count job
 func main() {
 	vehicleJob := api.NewJob("vehicle count")
-	brigdeStream, err := vehicleJob.AddSource(job.NewSensorReader("sensor-reader", 9990))
+	brigdeStream, err := vehicleJob.AddSource(vehicle_count_job.NewSensorReader("sensor-reader", 9990))
 	if err != nil {
 		panic(err)
 	}
-	brigdeStream.ApplyOperator(job.NewVehicleCounter("vehicle counter"))
+	brigdeStream.ApplyOperator(vehicle_count_job.NewVehicleCounter("vehicle counter"))
 
 	fmt.Println("This is a streaming job that counts vehicles in real time. " +
 		"Please enter vehicle types like 'car' and 'truck' in the input terminal " +

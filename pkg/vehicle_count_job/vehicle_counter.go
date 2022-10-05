@@ -1,4 +1,4 @@
-package job
+package vehicle_count_job
 
 import (
 	"fmt"
@@ -12,13 +12,15 @@ type VehicleCounter struct {
 	counter map[carType]int
 }
 
-func NewVehicleCounter(name string) *VehicleCounter {
-	var v = &VehicleCounter{}
+func NewVehicleCounter(name carType) *VehicleCounter {
+	var v = &VehicleCounter{
+		counter: make(map[carType]int),
+	}
 	v.InitNameAndStream(name)
 	return v
 }
 
-func (v *VehicleCounter) Apply(vehicleEvent api.Event, eventCollector []api.Event) error {
+func (v *VehicleCounter) Apply(vehicleEvent api.Event, eventCollector *[]api.Event) error {
 	vehicle := vehicleEvent.(*VehicleEvent).GetData().(carType)
 	v.counter[vehicle] = v.counter[vehicle] + 1
 
@@ -35,6 +37,6 @@ func (v *VehicleCounter) printCountMap() {
 	sort.Strings(keys)
 
 	for _, k := range keys {
-		fmt.Printf("  " + "%s :" +  "%d", k, v.counter[k])
+		fmt.Printf("  " + "%s : " +  "%d\n", k, v.counter[k])
 	}
 }
