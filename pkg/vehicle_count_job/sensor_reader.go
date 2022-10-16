@@ -12,7 +12,7 @@ import (
 const (
 	connHost = "localhost"
 	connType = "tcp"
-	connPort = "" // no use
+	connPort = 9990
 )
 
 type SensorReader struct {
@@ -20,13 +20,35 @@ type SensorReader struct {
 
 	// listener net.Listener
 	conn net.Conn
+
+	instanceId int
+	portBase   int
 }
 
-func NewSensorReader(name string, port int64) *SensorReader {
+func NewSensorReader(name string, args ...int) *SensorReader {
 	var s = &SensorReader{}
-	// s.InitNameAndStream(name)
-	// s.setupSocketReader(port)
+
+	if len(args) == 0 {
+		s.Init(name, 1)
+		s.portBase = connPort
+	} else if len(args) == 1 {
+		s.Init(name, args[0])
+		s.portBase = connPort
+	} else if len(args) == 2 {
+		s.Init(name, args[0])
+		s.portBase = args[1]
+	}
+
+	if len(args) > 2 {
+		panic("too many arguments for NewSensorReader")
+	}
+
 	return s
+}
+
+func (s *SensorReader) SetupInstance(instanceId int) {
+	s.instanceId = instanceId
+	s.setupSocketReader(s.portBase + s.instanceId)
 }
 
 func (s *SensorReader) GetEvents(eventCollector *[]api.Event) {
@@ -36,15 +58,15 @@ func (s *SensorReader) GetEvents(eventCollector *[]api.Event) {
 		// disconnecting from client, for now just exit
 		os.Exit(0)
 	}
-	vehicle := NewVehicleEvent(string(buf[:num - 1])) // the last character is '\n', so just ignore it
+	vehicle := NewVehicleEvent(string(buf[:num-1])) // the last character is '\n', so just ignore it
 	*eventCollector = append(*eventCollector, vehicle)
-	fmt.Printf("SensorReader --> %s\n", vehicle.GetData())
+	fmt.Printf("SensorReader(%d) --> %s\n", s.instanceId, vehicle.GetData())
 }
 
-func (s *SensorReader) setupSocketReader(port int64) {
+func (s *SensorReader) setupSocketReader(port int) {
 	fmt.Println("SensorReader begin to monitor")
 
-	listener, err := net.Listen(connType, connHost+":"+strconv.FormatInt(port, 10))
+	listener, err := net.Listen(connType, connHost+":"+strconv.FormatInt(int64(port), 10))
 	if err != nil {
 		panic(err)
 	}

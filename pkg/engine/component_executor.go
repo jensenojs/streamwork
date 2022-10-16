@@ -31,7 +31,7 @@ type ComponentExecutorImpl struct {
 }
 
 // =================================================================
-// implement for Component
+// Component
 func (c *ComponentExecutorImpl) SetName(name string) { // Use InitNameAndStream to instead
 	c.name = name
 }
@@ -50,14 +50,22 @@ func (c *ComponentExecutorImpl) GetOutgoingStream() *api.Stream {
 	return c.stream
 }
 
+func (c *ComponentExecutorImpl) SetParallelism(parallelism int) {
+	if parallelism < 0 || parallelism > 10 {
+		panic("Inappropriate parallelism number")
+	}
+	c.parallelism = parallelism
+}
+
 func (c *ComponentExecutorImpl) GetParallelism() int {
 	return c.parallelism
 }
 
-// helper function to init a instance executor combine SetName or SetOutgoingStream
-func (c *ComponentExecutorImpl) InitNameAndStream(name string) {
+// helper function to init a instance executor combine SetName, SetOutgoingStream and SetParallelism
+func (c *ComponentExecutorImpl) Init(name string, parallelism int) {
 	c.SetName(name)
 	c.SetOutgoingStream()
+	c.SetParallelism(parallelism)
 }
 
 // =================================================================
