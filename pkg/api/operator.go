@@ -17,6 +17,4 @@ type Operator interface {
 	// set up instance
 	SetupInstance(instanceId int)
 
-	// get the grouping strategy
-	GetGroupingStrategy() GroupStrategy
 }

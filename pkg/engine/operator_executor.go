@@ -3,7 +3,7 @@ package engine
 import "streamwork/pkg/api"
 
 /**
- * The executor for operator components. When the executor is started, 
+ * The executor for operator components. When the executor is started,
  * a new thread is created to call the apply() function of
  * the operator component repeatedly.
  *
@@ -11,12 +11,14 @@ import "streamwork/pkg/api"
  */
 type OperatorExecutor struct {
 	ComponentExecutorImpl
-	op api.Operator // specific operator, used to execute apply
+	op api.Operator      // specific operator, used to execute apply
+	gs api.GroupStrategy // group strategy, different from origin implementation, place strategy in operatorExecutor but not operator
 }
 
 func newOperatorExecutor(op api.Operator) *OperatorExecutor {
 	oe := &OperatorExecutor{
 		op: op,
+		gs: api.NewShuffleGrouping(), // default group strategy is round robin
 	}
 	oe.parallelism = op.GetParallelism()
 	oe.instanceExecutors = make([]InstanceExecutor, oe.parallelism)
@@ -36,5 +38,9 @@ func (o *OperatorExecutor) Start() {
 }
 
 func (o *OperatorExecutor) GetGroupingStrategy() api.GroupStrategy {
-	return o.op.GetGroupingStrategy()
+	return o.gs
+}
+
+func (o *OperatorExecutor) SetGroupingStrategy(gs api.GroupStrategy) {
+	o.gs = gs
 }

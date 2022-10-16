@@ -17,29 +17,27 @@ const (
 
 type SensorReader struct {
 	engine.SourceExecutor
-
-	// listener net.Listener
-	conn net.Conn
-
+	conn       net.Conn
 	instanceId int
 	portBase   int
 }
 
 func NewSensorReader(name string, args ...int) *SensorReader {
-	var s = &SensorReader{}
-
-	if len(args) == 0 {
-		s.Init(name, 1)
-		s.portBase = connPort
-	} else if len(args) == 1 {
-		s.Init(name, args[0])
-		s.portBase = connPort
-	} else if len(args) == 2 {
-		s.Init(name, args[0])
-		s.portBase = args[1]
+	var s = &SensorReader{
+		instanceId: 0,
 	}
 
-	if len(args) > 2 {
+	switch len(args) {
+	case 0:
+		s.Init(name, 1)
+		s.portBase = connPort
+	case 1:
+		s.Init(name, args[0])
+		s.portBase = connPort
+	case 2:
+		s.Init(name, args[0])
+		s.portBase = args[1]
+	default:
 		panic("too many arguments for NewSensorReader")
 	}
 
