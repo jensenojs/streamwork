@@ -1,6 +1,8 @@
 package engine
 
-import "streamwork/pkg/api"
+import (
+	"streamwork/pkg/api"
+)
 
 /**
  * The base class for executors of source and operator.

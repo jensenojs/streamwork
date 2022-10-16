@@ -1,6 +1,8 @@
 package engine
 
-import "streamwork/pkg/api"
+import (
+	"streamwork/pkg/api"
+)
 
 /**
  * Due to the need to achieve concurrency,

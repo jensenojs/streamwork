@@ -13,4 +13,10 @@ type Operator interface {
 	 * @param eventCollector The outgoing event collector
 	 */
 	Apply(Event, *[]Event) error
+
+	// set up instance
+	SetupInstance(instanceId int)
+
+	// get the grouping strategy
+	GetGroupingStrategy() GroupStrategy
 }
