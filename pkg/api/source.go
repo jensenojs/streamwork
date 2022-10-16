@@ -12,4 +12,7 @@ type Source interface {
 	 * @param eventCollector The outgoing event collector
 	 */
 	GetEvents(eventCollector *[]Event)
+
+	// set up instance
+	SetupInstance(instanceId int)
 }

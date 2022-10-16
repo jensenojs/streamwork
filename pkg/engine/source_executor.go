@@ -11,39 +11,30 @@ import "streamwork/pkg/api"
  */
 type SourceExecutor struct {
 	ComponentExecutorImpl
-	source api.Source
+	so api.Source // specific source, used to execute GetEvent
 }
 
-func newSourceExecutor(s api.Source) *SourceExecutor {
-	// needs to set or read fields by func
+func newSourceExecutor(so api.Source) *SourceExecutor {
 	se := &SourceExecutor{
-		source: s,
+		so: so,
 	}
-	// se.setRunOnce(se.runOnce)
+	se.parallelism = so.GetParallelism()
+	se.instanceExecutors = make([]InstanceExecutor, se.parallelism)
+	for i := range se.instanceExecutors {
+		se.instanceExecutors[i] = newSourceExecutorInstance(i, so)
+	}
 	return se
 }
 
-func (s *SourceExecutor) GetEvents([]api.Event) {
-	panic("Need to be implemented by specific source")
+func (s *SourceExecutor) Start() {
+	if s.instanceExecutors == nil {
+		panic("Should not be nil")
+	}
+	for i := range s.instanceExecutors {
+		s.instanceExecutors[i].Start()
+	}
 }
 
-func (s *SourceExecutor) runOnce() bool {
-	// get
-
-	// generate events
-	// s.source.GetEvents(&s.eventCollector)
-
-	// emit out
-	// for _, e := range s.eventCollector {
-	// 	s.sendOutgoingEvent(e)
-	// }
-
-	// clean up event that executed
-	// s.eventCollector = nil
-
-	return true
-}
-
-func (s *SourceExecutor) SetIncomingQueue(i *EventQueue) {
+func (s *SourceExecutor) SetIncomingQueues(i *EventQueue) {
 	panic("No incoming queue is allowed for source executor")
 }

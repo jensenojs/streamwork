@@ -26,10 +26,6 @@ func newOperatorExecutor(op api.Operator) *OperatorExecutor {
 	return oe
 }
 
-func (o *OperatorExecutor) Apply(api.Event, []api.Event) error {
-	panic("Need to be implemented by specific operator")
-}
-
 func (o *OperatorExecutor) Start() {
 	if o.instanceExecutors == nil {
 		panic("Should not be nil")
