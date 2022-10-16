@@ -35,6 +35,6 @@ func (s *SourceExecutor) Start() {
 	}
 }
 
-func (s *SourceExecutor) SetIncomingQueues(i *EventQueue) {
+func (s *SourceExecutor) SetIncomingQueues(queues []*EventQueue) {
 	panic("No incoming queue is allowed for source executor")
 }
