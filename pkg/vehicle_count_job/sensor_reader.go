@@ -24,8 +24,8 @@ type SensorReader struct {
 
 func NewSensorReader(name string, port int64) *SensorReader {
 	var s = &SensorReader{}
-	s.InitNameAndStream(name)
-	s.setupSocketReader(port)
+	// s.InitNameAndStream(name)
+	// s.setupSocketReader(port)
 	return s
 }
 

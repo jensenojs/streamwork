@@ -19,7 +19,7 @@ func newSourceExecutor(s api.Source) *SourceExecutor {
 	se := &SourceExecutor{
 		source: s,
 	}
-	se.setRunOnce(se.runOnce)
+	// se.setRunOnce(se.runOnce)
 	return se
 }
 
@@ -31,15 +31,15 @@ func (s *SourceExecutor) runOnce() bool {
 	// get
 
 	// generate events
-	s.source.GetEvents(&s.eventCollector)
+	// s.source.GetEvents(&s.eventCollector)
 
 	// emit out
-	for _, e := range s.eventCollector {
-		s.sendOutgoingEvent(e)
-	}
+	// for _, e := range s.eventCollector {
+	// 	s.sendOutgoingEvent(e)
+	// }
 
 	// clean up event that executed
-	s.eventCollector = nil
+	// s.eventCollector = nil
 
 	return true
 }

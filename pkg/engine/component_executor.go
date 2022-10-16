@@ -1,96 +1,43 @@
 package engine
 
-import "streamwork/pkg/api"
-
 /**
  * The base class for executors of source and operator.
  */
 type ComponentExecutor interface {
-	api.Component
+	// Get the instance executors of this component executor.
+	GetInstanceExecutors() []InstanceExecutor
 
-	SetIncomingQueue(i *EventQueue)
+	SetIncomingQueues(queues []*EventQueue)
 
-	SetOutgoingQueue(i *EventQueue)
+	SetOutgoingQueue(queue *EventQueue)
+
+	Start()
 }
 
 /**
  * 	used to Inherited by OperatorExecutor and SourceExecutor
  */
 type ComponentExecutorImpl struct {
-	name           string
-	fn             func()
-	runOnce        func() bool // source executor or operator executor, but run with their own GetEvents or Apply
-	eventCollector []api.Event // accept events from user logic
-	stream         *api.Stream
-	incomingQueue  *EventQueue // for upstream processes
-	outgoingQueue  *EventQueue // for downstream processes
+	parallelism       int
+	instanceExecutors []InstanceExecutor
 }
 
-// =================================================================
-// implement for Component
-func (c *ComponentExecutorImpl) SetName(name string) { // Use InitNameAndStream to instead
-	c.name = name
+func (c *ComponentExecutorImpl) GetInstanceExecutors() []InstanceExecutor {
+	return c.instanceExecutors
 }
 
-func (c *ComponentExecutorImpl) GetName() string {
-	return c.name
-}
-
-func (c *ComponentExecutorImpl) SetOutgoingStream() { // Use InitNameAndStream to instead
-	if c.stream == nil {
-		c.stream = api.NewStream()
+func (c *ComponentExecutorImpl) SetIncomingQueues(queues []*EventQueue) {
+	for i := range queues {
+		c.instanceExecutors[i].SetIncomingQueue(queues[i])
 	}
 }
 
-func (c *ComponentExecutorImpl) GetOutgoingStream() *api.Stream {
-	return c.stream
-}
-
-// helper function to init a component executor, trying to not use SetName or SetOutgoingStream
-func (c *ComponentExecutorImpl) InitNameAndStream(name string) {
-	c.SetName(name)
-	c.SetOutgoingStream()
-}
-
-// =================================================================
-// implement for ComponentExecutor
-func (c *ComponentExecutorImpl) SetIncomingQueue(i *EventQueue) {
-	c.incomingQueue = i
-}
-
-func (c *ComponentExecutorImpl) SetOutgoingQueue(o *EventQueue) {
-	c.outgoingQueue = o
-}
-
-// helper functions to receive/send events
-func (c *ComponentExecutorImpl) takeIncomingEvent() api.Event {
-	e, ok := <-c.incomingQueue.queue
-	if ok {
-		return e
-	}
-	return nil
-}
-
-func (c *ComponentExecutorImpl) sendOutgoingEvent(event api.Event) {
-	c.outgoingQueue.queue <- event
-}
-
-// =================================================================
-// implement for Process
-func (c *ComponentExecutorImpl) newProcess() {
-	c.fn = func() {
-		for {
-			if ok := c.runOnce(); ok != true {
-				break
-			}
-		}
+func (c *ComponentExecutorImpl) SetOutgoingQueues(queue *EventQueue) {
+	for i := range c.instanceExecutors {
+		c.instanceExecutors[i].SetIncomingQueue(queue)
 	}
 }
 
 func (c *ComponentExecutorImpl) Start() {
-	go c.fn()
-}
-
-func (c *ComponentExecutorImpl) setRunOnce(runOnce func() bool) {
-	c.runOnce = runOnce
+	panic("Need specific implementation")
 }

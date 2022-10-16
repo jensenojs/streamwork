@@ -18,7 +18,7 @@ func newOperatorExecutor(op api.Operator) *OperatorExecutor {
 	oe := &OperatorExecutor{
 		operator : op,
 	}
-	oe.setRunOnce(oe.runOnce)
+	// oe.setRunOnce(oe.runOnce)
 	return oe
 }
 
@@ -32,21 +32,21 @@ func (o *OperatorExecutor) Apply(api.Event, []api.Event) error {
  */
 func (o *OperatorExecutor) runOnce() bool {
 	// read input
-	event := o.takeIncomingEvent()
-	if event == nil {
-		return false
-	}
+	// event := o.takeIncomingEvent()
+	// if event == nil {
+	// 	return false
+	// }
 
-	// apply operatorion
-	o.operator.Apply(event, &o.eventCollector)
+	// // apply operatorion
+	// o.operator.Apply(event, &o.eventCollector)
 
-	// emit out : should work.?
-	for _, e := range o.eventCollector {
-		o.sendOutgoingEvent(e)
-	}
+	// // emit out : should work.?
+	// for _, e := range o.eventCollector {
+	// 	o.sendOutgoingEvent(e)
+	// }
 
-	// clean up event that executed
-	o.eventCollector = nil
+	// // clean up event that executed
+	// o.eventCollector = nil
 
 	return true
 }

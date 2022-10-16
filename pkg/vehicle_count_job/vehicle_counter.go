@@ -16,7 +16,7 @@ func NewVehicleCounter(name carType) *VehicleCounter {
 	var v = &VehicleCounter{
 		counter: make(map[carType]int),
 	}
-	v.InitNameAndStream(name)
+	// v.InitNameAndStream(name)
 	return v
 }
 
