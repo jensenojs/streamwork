@@ -3,11 +3,11 @@ package engine
 import "streamwork/pkg/api"
 
 /**
- * InstanceExecutor take charge of componentExecutor in v0.1, as implementation of parallelism mechanism
+ * Due to the need to achieve concurrency,
+ * InstanceExecutor takes on some of ComponentExecutor's responsibilities in v0.1
  */
 type InstanceExecutor interface {
 	Process
-	api.Component
 
 	SetIncomingQueue(in *EventQueue)
 
@@ -15,39 +15,11 @@ type InstanceExecutor interface {
 }
 
 type InstanceExecutorImpl struct {
-	name           string
-	fnWrapper      func() 	   // wrapper function for fn
+	fnWrapper      func()      // wrapper function for fn
 	fn             func() bool // process function, need to specific implementation for user logic
-	stream         *api.Stream // connect to next component
 	eventCollector []api.Event // accept events from user logic
 	incomingQueue  *EventQueue // for upstream processes
 	outgoingQueue  *EventQueue // for downstream processes
-}
-
-// =================================================================
-// implement for Component
-func (i *InstanceExecutorImpl) SetName(name string) { // Use InitNameAndStream to instead
-	i.name = name
-}
-
-func (i *InstanceExecutorImpl) GetName() string {
-	return i.name
-}
-
-func (i *InstanceExecutorImpl) SetOutgoingStream() { // Use InitNameAndStream to instead
-	if i.stream == nil {
-		i.stream = api.NewStream()
-	}
-}
-
-func (i *InstanceExecutorImpl) GetOutgoingStream() *api.Stream {
-	return i.stream
-}
-
-// helper function to init a instance executor combine SetName or SetOutgoingStream
-func (i *InstanceExecutorImpl) InitNameAndStream(name string) {
-	i.SetName(name)
-	i.SetOutgoingStream()
 }
 
 // =================================================================

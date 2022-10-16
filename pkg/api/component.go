@@ -12,4 +12,7 @@ type Component interface {
 
 	// Get the outgoing event stream of this component. The stream is used to connect the downstream components.
 	GetOutgoingStream() *Stream
+
+	// Get the parallelism (number of instances) of this component.
+	GetParallelism() int
 }
