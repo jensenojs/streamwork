@@ -9,6 +9,7 @@ import (
  */
 type ComponentExecutor interface {
 	api.Component
+	Process
 
 	// Get the instance executors of this component executor.
 	GetInstanceExecutors() []InstanceExecutor
@@ -82,10 +83,30 @@ func (c *ComponentExecutorImpl) SetIncomingQueues(queues []*EventQueue) {
 
 func (c *ComponentExecutorImpl) SetOutgoingQueue(queue *EventQueue) {
 	for i := range c.instanceExecutors {
-		c.instanceExecutors[i].SetIncomingQueue(queue)
+		c.instanceExecutors[i].SetOutgoingQueue(queue)
+	}
+}
+
+// =================================================================
+// implement for process
+func (c *ComponentExecutorImpl) newProcess() {
+	if c.instanceExecutors == nil {
+		panic("Should not be nil")
+	}
+	for i := range c.instanceExecutors {
+		c.instanceExecutors[i].newProcess()
 	}
 }
 
 func (c *ComponentExecutorImpl) Start() {
+	if c.instanceExecutors == nil {
+		panic("Should not be nil")
+	}
+	for i := range c.instanceExecutors {
+		c.instanceExecutors[i].Start()
+	}
+}
+
+func (c *ComponentExecutorImpl) runOnce() bool {
 	panic("Need specific implementation")
 }

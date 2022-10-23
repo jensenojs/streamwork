@@ -44,6 +44,8 @@ func NewSensorReader(name string, args ...int) *SensorReader {
 	return s
 }
 
+// =================================================================
+// implement for Source
 func (s *SensorReader) SetupInstance(instanceId int) {
 	s.instanceId = instanceId
 	s.setupSocketReader(s.portBase + s.instanceId)

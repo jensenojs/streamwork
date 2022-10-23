@@ -1,6 +1,10 @@
 package engine
 
-import "streamwork/pkg/api"
+import (
+	"streamwork/pkg/api"
+
+	"github.com/huandu/go-clone"
+)
 
 /**
  * The executor for operator components. When the executor is started,
@@ -23,18 +27,12 @@ func newOperatorExecutor(op api.Operator) *OperatorExecutor {
 	oe.parallelism = op.GetParallelism()
 	oe.instanceExecutors = make([]InstanceExecutor, oe.parallelism)
 	for i := range oe.instanceExecutors {
-		oe.instanceExecutors[i] = newOperatorExecutorInstance(i, op)
+		// need clone new operator but not use the same one
+		// otherwise parallelism will become meaningless
+		c := clone.Clone(op).(api.Operator)
+		oe.instanceExecutors[i] = newOperatorExecutorInstance(i, c)
 	}
 	return oe
-}
-
-func (o *OperatorExecutor) Start() {
-	if o.instanceExecutors == nil {
-		panic("Should not be nil")
-	}
-	for i := range o.instanceExecutors {
-		o.instanceExecutors[i].Start()
-	}
 }
 
 func (o *OperatorExecutor) GetGroupingStrategy() api.GroupStrategy {

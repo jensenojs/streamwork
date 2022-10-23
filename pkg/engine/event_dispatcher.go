@@ -7,8 +7,7 @@ import "streamwork/pkg/api"
  * the incoming queue to the outgoing queues with a grouping strategy.
  */
 type EventDispatcher struct {
-	fnWrapper          func()      // wrapper function for fn
-	fn                 func() bool // process function, need to specific implementation for user logic
+	fnWrapper          func() // wrapper function for fn, no need for fn
 	downStreamExecutor *OperatorExecutor
 	incomingQueue      *EventQueue
 	outgoingQueues     []*EventQueue
@@ -25,7 +24,7 @@ func NewEventDispatcher(downStreamExecutor *OperatorExecutor) *EventDispatcher {
 func (v *EventDispatcher) newProcess() {
 	v.fnWrapper = func() {
 		for {
-			if ok := v.fn(); ok != true {
+			if ok := v.runOnce(); ok != true {
 				break
 			}
 		}
@@ -62,6 +61,6 @@ func (v *EventDispatcher) SetIncomingQueue(queue *EventQueue) {
 	v.incomingQueue = queue
 }
 
-func (v *EventDispatcher) SetOutgoingQueue(queues []*EventQueue) {
+func (v *EventDispatcher) SetOutgoingQueues(queues []*EventQueue) {
 	v.outgoingQueues = queues
 }

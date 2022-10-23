@@ -5,14 +5,14 @@ import "streamwork/pkg/api"
 type SourceInstanceExecutor struct {
 	InstanceExecutorImpl
 	instanceId int
-	source api.Source
+	source     api.Source
 }
 
-func newSourceExecutorInstance(Id int, so api.Source) *SourceInstanceExecutor {
+func newSourceExecutorInstance(id int, so api.Source) *SourceInstanceExecutor {
 	var soi = new(SourceInstanceExecutor)
-	soi.instanceId = Id
+	soi.instanceId = id
 	soi.source = so
-	soi.source.SetupInstance(Id)
+	soi.source.SetupInstance(id)
 	soi.setRunOnce(soi.runOnce)
 	return soi
 }

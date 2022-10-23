@@ -91,7 +91,7 @@ func (j *JobStarter) connectExecutors(connection *Connection) {
 		ds[i] = NewEventQueue(j.queue_size)
 	}
 	connection.to.SetIncomingQueues(ds)
-	d.SetOutgoingQueue(ds)
+	d.SetOutgoingQueues(ds)
 }
 
 // =================================================================
@@ -101,6 +101,10 @@ func (j *JobStarter) startProcesses() {
 	for _, e := range j.executorList {
 		e.(Process).newProcess()
 		e.(Process).Start()
+	}
+	for _, d := range j.dispatcherList {
+		d.newProcess()
+		d.Start()
 	}
 }
 

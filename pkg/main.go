@@ -10,7 +10,7 @@ import (
 // vehicle count job
 func main() {
 	vehicleJob := api.NewJob("vehicle count")
-	brigdeStream, err := vehicleJob.AddSource(vehicle_count_job.NewSensorReader("sensor-reader", 2))
+	brigdeStream, err := vehicleJob.AddSource(vehicle_count_job.NewSensorReader("sensor-reader"))
 	if err != nil {
 		panic(err)
 	}

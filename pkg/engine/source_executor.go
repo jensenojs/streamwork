@@ -1,6 +1,10 @@
 package engine
 
-import "streamwork/pkg/api"
+import (
+	"streamwork/pkg/api"
+
+	"github.com/huandu/go-clone"
+)
 
 /**
  * The executor for source components. When the executor is started,
@@ -21,18 +25,12 @@ func newSourceExecutor(so api.Source) *SourceExecutor {
 	se.parallelism = so.GetParallelism()
 	se.instanceExecutors = make([]InstanceExecutor, se.parallelism)
 	for i := range se.instanceExecutors {
-		se.instanceExecutors[i] = newSourceExecutorInstance(i, so)
+		// need clone new operator but not use the same one
+		// otherwise parallelism will become meaningless
+		c := clone.Clone(so).(api.Source)
+		se.instanceExecutors[i] = newSourceExecutorInstance(i, c)
 	}
 	return se
-}
-
-func (s *SourceExecutor) Start() {
-	if s.instanceExecutors == nil {
-		panic("Should not be nil")
-	}
-	for i := range s.instanceExecutors {
-		s.instanceExecutors[i].Start()
-	}
 }
 
 func (s *SourceExecutor) SetIncomingQueues(queues []*EventQueue) {

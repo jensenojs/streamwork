@@ -15,10 +15,10 @@ type VehicleCounter struct {
 
 func NewVehicleCounter(name string, args ...any) *VehicleCounter {
 	var v = &VehicleCounter{
-		counter: make(map[carType]int),
+		counter:    make(map[carType]int),
 		instanceId: 0,
 	}
-	
+
 	switch len(args) {
 	case 0:
 		v.Init(name, 1)
@@ -33,6 +33,8 @@ func NewVehicleCounter(name string, args ...any) *VehicleCounter {
 	return v
 }
 
+// =================================================================
+// implement for Operator
 func (v *VehicleCounter) SetupInstance(instanceId int) {
 	v.instanceId = instanceId
 }
@@ -41,7 +43,7 @@ func (v *VehicleCounter) Apply(vehicleEvent api.Event, eventCollector *[]api.Eve
 	vehicle := vehicleEvent.(*VehicleEvent).GetData().(carType)
 	v.counter[vehicle] = v.counter[vehicle] + 1
 
-	fmt.Printf("VehicleCounter(%d) --> ", v.instanceId)
+	fmt.Printf("VehicleCounter(%d) --> \n", v.instanceId)
 	v.printCountMap()
 	return nil
 }
