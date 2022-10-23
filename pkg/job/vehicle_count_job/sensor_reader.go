@@ -4,9 +4,10 @@ import (
 	"fmt"
 	"net"
 	"os"
+
 	"strconv"
-	"streamwork/pkg/api"
 	"streamwork/pkg/engine"
+	"streamwork/pkg/engine/source"
 )
 
 const (
@@ -16,7 +17,7 @@ const (
 )
 
 type SensorReader struct {
-	engine.SourceExecutor
+	source.SourceExecutor
 	conn       net.Conn
 	instanceId int
 	portBase   int
@@ -51,7 +52,7 @@ func (s *SensorReader) SetupInstance(instanceId int) {
 	s.setupSocketReader(s.portBase + s.instanceId)
 }
 
-func (s *SensorReader) GetEvents(eventCollector *[]api.Event) {
+func (s *SensorReader) GetEvents(eventCollector *[]engine.Event) {
 	buf := make([]byte, 1024)
 	num, err := s.conn.Read(buf)
 	if err != nil {

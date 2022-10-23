@@ -3,12 +3,13 @@ package vehicle_count_job
 import (
 	"fmt"
 	"sort"
-	"streamwork/pkg/api"
 	"streamwork/pkg/engine"
+	"streamwork/pkg/engine/operator"
+	"streamwork/pkg/engine/transport/strategy"
 )
 
 type VehicleCounter struct {
-	engine.OperatorExecutor
+	operator.OperatorExecutor
 	counter    map[carType]int
 	instanceId int
 }
@@ -26,7 +27,7 @@ func NewVehicleCounter(name string, args ...any) *VehicleCounter {
 		v.Init(name, args[0].(int))
 	case 2:
 		v.Init(name, args[0].(int))
-		v.SetGroupingStrategy(args[1].(api.GroupStrategy)) // in fact, default strategy is round-robin
+		v.SetGroupingStrategy(args[1].(strategy.GroupStrategy)) // in fact, default strategy is round-robin
 	default:
 		panic("too many arguments for NewVehicleCounter")
 	}
@@ -39,7 +40,7 @@ func (v *VehicleCounter) SetupInstance(instanceId int) {
 	v.instanceId = instanceId
 }
 
-func (v *VehicleCounter) Apply(vehicleEvent api.Event, eventCollector *[]api.Event) error {
+func (v *VehicleCounter) Apply(vehicleEvent engine.Event, eventCollector *[]engine.Event) error {
 	vehicle := vehicleEvent.(*VehicleEvent).GetData().(carType)
 	v.counter[vehicle] = v.counter[vehicle] + 1
 

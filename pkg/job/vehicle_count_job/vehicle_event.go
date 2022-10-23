@@ -8,7 +8,7 @@ type VehicleEvent struct {
 
 func NewVehicleEvent(Type string) *VehicleEvent {
 	return &VehicleEvent{
-		Type : Type,
+		Type: Type,
 	}
 }
 

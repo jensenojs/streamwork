@@ -1,6 +1,8 @@
-package api
+package engine
 
-import "errors"
+import (
+	"errors"
+)
 
 /**
  * The Stream class represents a data stream coming out of a component.
@@ -11,29 +13,26 @@ import "errors"
  *      .applyOperator(myOperator);
  */
 type Stream struct {
-	operatorSet map[Operator]void
+	OperatorSet map[Operator]Void
 }
 
+// helper function to init a stream
 func NewStream() *Stream {
 	return &Stream{
-		operatorSet: make(map[Operator]void),
+		OperatorSet: make(map[Operator]Void),
 	}
 }
 
-/**
- * Apply an operator to this stream.
- * @param operator The operator to be connected to the current stream
- * @return The outgoing stream of the operator.
- */
+// ApplyOperator Apply an operator to this stream, return the outgoing stream of the operator.
 func (s *Stream) ApplyOperator(op Operator) (stream *Stream, err error) {
-	if _, ok := s.operatorSet[op]; ok {
+	if _, ok := s.OperatorSet[op]; ok {
 		err = errors.New("Operator " + op.GetName() + " already exists")
 		return
 	}
-	s.operatorSet[op] = member
+	s.OperatorSet[op] = Member
 	return op.GetOutgoingStream(), nil
 }
 
-func (s *Stream) GetAppliedOperators() map[Operator]void {
-	return s.operatorSet
+func (s *Stream) GetAppliedOperators() map[Operator]Void {
+	return s.OperatorSet
 }

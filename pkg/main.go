@@ -2,14 +2,13 @@ package main
 
 import (
 	"fmt"
-	"streamwork/pkg/api"
-	"streamwork/pkg/engine"
-	"streamwork/pkg/vehicle_count_job"
+	"streamwork/pkg/engine/job"
+	"streamwork/pkg/job/vehicle_count_job"
 )
 
 // vehicle count job
 func main() {
-	vehicleJob := api.NewJob("vehicle count")
+	vehicleJob := job.NewJob("vehicle count")
 	brigdeStream, err := vehicleJob.AddSource(vehicle_count_job.NewSensorReader("sensor-reader"))
 	if err != nil {
 		panic(err)
@@ -20,6 +19,6 @@ func main() {
 		"Please enter vehicle types like 'car' and 'truck' in the input terminal " +
 		"and look at the output")
 
-	starter := engine.NewJobStarter(vehicleJob)
+	starter := job.NewJobStarter(vehicleJob)
 	starter.Start()
 }

@@ -1,12 +1,13 @@
-package api
+package strategy
 
-import "reflect"
+import (
+	"reflect"
+	"streamwork/pkg/engine"
+)
 
-/**
- * With filed grouping, the event are routed to downstream
- * instances by its value. This implementation has many limitations
- * as it only supports mapping events by string.
- */
+// FieldGrouping the event are routed to downstream
+// instances by its value. This implementation has many limitations
+// as it only supports mapping events by string.
 type FieldGrouping struct {
 	cnt int
 	m   map[string]int
@@ -21,12 +22,12 @@ func NewFieldGrouping() *FieldGrouping {
 
 // Get key from an event. Child class can override this function to calculate key in different ways.
 // For example, calculate the key from some specific fields.
-func (f *FieldGrouping) GetKey(event Event) any {
+func (f *FieldGrouping) GetKey(event engine.Event) any {
 	return valuesFromStruct(event)
 }
 
 // Get target instance id from an event and component parallelism.
-func (f *FieldGrouping) GetInstance(event Event, parallelism int) int {
+func (f *FieldGrouping) GetInstance(event engine.Event, parallelism int) int {
 	s, ok := f.GetKey(event).(string)
 	if !ok {
 		panic("only support map for string currently")
