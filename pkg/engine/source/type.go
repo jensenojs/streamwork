@@ -17,6 +17,5 @@ type SourceExecutor struct {
 
 type SourceInstanceExecutor struct {
 	component.InstanceExecutorImpl
-	instanceId int
 	source     engine.Source
 }

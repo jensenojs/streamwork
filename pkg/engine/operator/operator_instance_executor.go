@@ -4,7 +4,7 @@ import "streamwork/pkg/engine"
 
 func NewOperatorExecutorInstance(Id int, op engine.Operator) *OperatorInstanceExecutor {
 	var opi = new(OperatorInstanceExecutor)
-	opi.instanceId = Id
+	opi.InstanceId = Id
 	opi.operator = op
 	opi.operator.SetupInstance(Id)
 	opi.SetRunOnce(opi.RunOnce)

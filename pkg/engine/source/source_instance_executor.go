@@ -4,7 +4,7 @@ import "streamwork/pkg/engine"
 
 func NewSourceExecutorInstance(id int, so engine.Source) *SourceInstanceExecutor {
 	var soi = new(SourceInstanceExecutor)
-	soi.instanceId = id
+	soi.InstanceId = id
 	soi.source = so
 	soi.source.SetupInstance(id)
 	soi.SetRunOnce(soi.RunOnce)

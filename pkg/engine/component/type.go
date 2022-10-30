@@ -14,6 +14,7 @@ type ComponentExecutorImpl struct {
 }
 
 type InstanceExecutorImpl struct {
+	InstanceId     int
 	FnWrapper      func()             // wrapper function for fn
 	Fn             func() bool        // process function, need to specific implementation for user logic
 	EventCollector []engine.Event     // accept events from user logic
