@@ -19,5 +19,5 @@ type OperatorExecutor struct {
 
 type OperatorInstanceExecutor struct {
 	component.InstanceExecutorImpl
-	operator   engine.Operator
+	operator engine.Operator
 }

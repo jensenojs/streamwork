@@ -17,5 +17,5 @@ type SourceExecutor struct {
 
 type SourceInstanceExecutor struct {
 	component.InstanceExecutorImpl
-	source     engine.Source
+	source engine.Source
 }

@@ -14,8 +14,8 @@ type Connection struct {
 
 func NewConnection(from engine.ComponentExecutor, to *operator.OperatorExecutor, ch engine.Channel) *Connection {
 	return &Connection{
-		From: from,
-		To:   to,
+		From:    from,
+		To:      to,
 		Channel: ch,
 	}
 }

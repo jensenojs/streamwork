@@ -1,18 +1,11 @@
 package vehicle_count_job
 
 import (
-	"fmt"
+	"log"
 	"sort"
 	"streamwork/pkg/engine"
-	"streamwork/pkg/engine/operator"
 	"streamwork/pkg/engine/transport/strategy"
 )
-
-type VehicleCounter struct {
-	operator.OperatorExecutor
-	counter    map[carType]int
-	instanceId int
-}
 
 func NewVehicleCounter(name string, args ...any) *VehicleCounter {
 	var v = &VehicleCounter{
@@ -40,11 +33,11 @@ func (v *VehicleCounter) SetupInstance(instanceId int) {
 	v.instanceId = instanceId
 }
 
-func (v *VehicleCounter) Apply(vehicleEvent engine.Event, eventCollector *[]engine.Event) error {
+func (v *VehicleCounter) Apply(vehicleEvent engine.Event, eventCollector engine.EventCollector) error {
 	vehicle := vehicleEvent.(*VehicleEvent).GetData().(carType)
 	v.counter[vehicle] = v.counter[vehicle] + 1
 
-	fmt.Printf("VehicleCounter(%d) --> \n", v.instanceId)
+	log.Printf("VehicleCounter(%d) --> \n", v.instanceId)
 	v.printCountMap()
 	return nil
 }
@@ -57,6 +50,6 @@ func (v *VehicleCounter) printCountMap() {
 	sort.Strings(keys)
 
 	for _, k := range keys {
-		fmt.Printf("  "+"%s : "+"%d\n", k, v.counter[k])
+		log.Printf("  "+"%s : "+"%d\n", k, v.counter[k])
 	}
 }
