@@ -3,7 +3,9 @@ package job
 import (
 	"streamwork/pkg/engine"
 	"streamwork/pkg/engine/operator"
+	"streamwork/pkg/engine/process"
 	"streamwork/pkg/engine/source"
+	"streamwork/pkg/engine/stream"
 	"streamwork/pkg/engine/transport"
 )
 
@@ -45,7 +47,7 @@ func (j *JobStarter) setupComponentExecutors() {
 
 // traverseComponent traverse the components from source and initialize them
 func (j *JobStarter) traverseComponent(from engine.Component, fromExecutor engine.ComponentExecutor) {
-	downstream := from.GetOutgoingStream()
+	downstream := from.GetOutgoingStream().(*stream.Stream)
 	// get the operators apply on upstream components
 	for t := range downstream.GetAppliedOperators() {
 		te := operator.NewOperatorExecutor(t)
@@ -72,7 +74,7 @@ func (j *JobStarter) setupConnections() {
 // Note that in this version, there is no shared "from" component and "to" component.
 // The job looks like a single linked list.
 func (j *JobStarter) connectExecutors(connection *transport.Connection) {
-	d := transport.NewEventDispatcher(connection.To)
+	d := NewEventDispatcher(connection.To)
 	j.dispatcherList = append(j.dispatcherList, d)
 
 	// connect to upstream
@@ -95,8 +97,8 @@ func (j *JobStarter) connectExecutors(connection *transport.Connection) {
 func (j *JobStarter) startProcesses() {
 	j.reverseExecutorList()
 	for _, e := range j.executorList {
-		e.(engine.Process).NewProcess()
-		e.(engine.Process).Start()
+		e.(process.Process).NewProcess()
+		e.(process.Process).Start()
 	}
 	for _, d := range j.dispatcherList {
 		d.NewProcess()

@@ -26,10 +26,9 @@ func (j *Job) GetSources() map[engine.Source]void {
 }
 
 // AddSource Add a source into the job. A stream is returned which will be used to connect to other operators.
-func (j *Job) AddSource(source engine.Source) (stream *engine.Stream, err error) {
+func (j *Job) AddSource(source engine.Source) (any, error) {
 	if _, ok := j.sourceSet[source]; ok {
-		err = errors.New("Source" + source.GetName() + " already exists")
-		return
+		return nil, errors.New("Source" + source.GetName() + " already exists")
 	}
 	j.sourceSet[source] = member
 	return source.GetOutgoingStream(), nil

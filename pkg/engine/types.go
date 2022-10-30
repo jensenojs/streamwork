@@ -1,8 +1,18 @@
 package engine
 
+import "streamwork/pkg/engine/process"
+
 type Void struct{}
 
+type Channel = string
+
 var Member Void
+
+const DEFAULT_CHANNEL = "default"
+
+type Stream interface {
+	ApplyOperator(Operator) (Stream, error)
+}
 
 /**
  * The base class for all components, including Source and Operator.
@@ -15,7 +25,8 @@ type Component interface {
 	SetOutgoingStream()
 
 	// Get the outgoing event stream of this component. The stream is used to connect the downstream components.
-	GetOutgoingStream() *Stream
+	// It should (but can't) be Stream.stream
+	GetOutgoingStream() Stream
 
 	// Get the parallelism (number of instances) of this component.
 	GetParallelism() int
@@ -57,26 +68,11 @@ type Source interface {
 }
 
 /**
- * This is the base interface of all processes (executors). When a process is started,
- * a new thread is created to call the RunOnce() function of the derived class.
- * Each process also have an incoming event queue and an outgoing event queue.
- */
-type Process interface {
-	NewProcess()
-
-	// Start the process.
-	Start()
-
-	// Run process once return true if the thread should continue; false if the thread should exist.
-	RunOnce() bool
-}
-
-/**
  * The base class for executors of source and operator.
  */
 type ComponentExecutor interface {
 	Component
-	Process
+	process.Process
 
 	// Get the instance executors of this component executor.
 	GetInstanceExecutors() []InstanceExecutor
@@ -93,7 +89,7 @@ type ComponentExecutor interface {
  * InstanceExecutor takes on some of ComponentExecutor's responsibilities in v0.1
  */
 type InstanceExecutor interface {
-	Process
+	process.Process
 
 	SetIncoming(in *EventQueue)
 

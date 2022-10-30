@@ -21,5 +21,5 @@ type JobStarter struct {
 	job            *Job                       // the job to start
 	executorList   []engine.ComponentExecutor // list of executors
 	connectionList []*transport.Connection    // connections between component executors
-	dispatcherList []*transport.EventDispatcher
+	dispatcherList []*EventDispatcher
 }

@@ -2,6 +2,7 @@ package component
 
 import (
 	"streamwork/pkg/engine"
+	"streamwork/pkg/engine/stream"
 )
 
 // =================================================================
@@ -16,11 +17,11 @@ func (c *ComponentExecutorImpl) GetName() string {
 
 func (c *ComponentExecutorImpl) SetOutgoingStream() { // Use InitNameAndStream to instead
 	if c.Stream == nil {
-		c.Stream = engine.NewStream()
+		c.Stream = stream.NewStream()
 	}
 }
 
-func (c *ComponentExecutorImpl) GetOutgoingStream() *engine.Stream {
+func (c *ComponentExecutorImpl) GetOutgoingStream() engine.Stream {
 	return c.Stream
 }
 
