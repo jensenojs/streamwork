@@ -1,18 +1,9 @@
-package job
+package transport
 
 import (
 	"streamwork/pkg/engine"
 	"streamwork/pkg/engine/operator"
 )
-
-// EventDispatcher is responsible for transporting events from
-// the incoming queue to the outgoing queues with a grouping strategy.
-type EventDispatcher struct {
-	fnWrapper          func() // wrapper function for fn, no need for fn
-	downStreamExecutor *operator.OperatorExecutor
-	incoming           *engine.EventQueue
-	outgoings          []*engine.EventQueue
-}
 
 func NewEventDispatcher(downStreamExecutor *operator.OperatorExecutor) *EventDispatcher {
 	return &EventDispatcher{
@@ -22,6 +13,7 @@ func NewEventDispatcher(downStreamExecutor *operator.OperatorExecutor) *EventDis
 
 // ============================================================
 // implementation of Process
+
 func (v *EventDispatcher) NewProcess() {
 	v.fnWrapper = func() {
 		for {
@@ -45,23 +37,20 @@ func (v *EventDispatcher) RunOnce() bool {
 }
 
 // ============================================================
+
 // init and use for incoming/outgoing queues
 func (v *EventDispatcher) takeIncomingEvent() engine.Event {
-	e, ok := <-v.incoming.Queue
-	if ok {
-		return e
-	}
-	return nil
+	return v.incoming.Take()
 }
 
 func (v *EventDispatcher) sendOutgoingEvent(event engine.Event, idx int) {
-	v.outgoings[idx].Queue <- event
+	v.outgoings[idx].Send(event)
 }
 
-func (v *EventDispatcher) SetIncoming(queue *engine.EventQueue) {
+func (v *EventDispatcher) SetIncoming(queue engine.EventQueue) {
 	v.incoming = queue
 }
 
-func (v *EventDispatcher) SetOutgoings(queues []*engine.EventQueue) {
+func (v *EventDispatcher) SetOutgoings(queues []engine.EventQueue) {
 	v.outgoings = queues
 }

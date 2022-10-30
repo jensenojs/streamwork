@@ -4,32 +4,25 @@ import (
 	"streamwork/pkg/engine"
 )
 
-// =================================================================
-// implement for InstanceExecutor
-func (i *InstanceExecutorImpl) SetIncoming(in *engine.EventQueue) {
-	i.Incoming = in
-}
-
-func (i *InstanceExecutorImpl) SetOutgoing(out *engine.EventQueue) {
-	i.Outgoing = out
-}
-
-// helper functions to receive events
+// TakeIncomingEvent is a helper function to receive events
 func (i *InstanceExecutorImpl) TakeIncomingEvent() engine.Event {
-	e, ok := <-i.Incoming.Queue
-	if ok {
-		return e
-	}
-	return nil
+	return i.Incoming.Take()
 }
 
-// helper functions to send events
-func (i *InstanceExecutorImpl) SendOutgoingEvent(event engine.Event) {
-	i.Outgoing.Queue <- event
+// SendOutgoingEvent is a helper function to send events to all downstreams.
+func (i *InstanceExecutorImpl) SendOutgoingEvent() {
+	for _, ch := range i.EventCollector.GetRegisteredChannels() {
+		for _, out := range i.EventCollector.GetEventList(ch) {
+			for _, q := range i.OutgoingMap[ch] {
+				q.Send(out)
+			}
+		}
+	}
 }
 
 // =================================================================
 // implement for Process
+
 func (i *InstanceExecutorImpl) NewProcess() {
 	i.FnWrapper = func() {
 		for {
@@ -48,7 +41,24 @@ func (i *InstanceExecutorImpl) RunOnce() bool {
 	panic("Need specific implementation")
 }
 
-// helper function to set RunOnce
+// SetRunOnce is a helper function to set RunOnce during operator / source executor impl init.
 func (i *InstanceExecutorImpl) SetRunOnce(RunOnce func() bool) {
 	i.Fn = RunOnce
+}
+
+// =================================================================
+// implement for InstanceExecutor
+
+func (i *InstanceExecutorImpl) SetIncoming(in engine.EventQueue) {
+	i.Incoming = in
+}
+
+func (i *InstanceExecutorImpl) AddOutgoing(ch engine.Channel, out engine.EventQueue) {
+	if c, ok := i.OutgoingMap[ch]; ok {
+		c = append(c, out)
+	} else {
+		l := make([]engine.EventQueue, 0)
+		l[0] = out
+		i.OutgoingMap[ch] = l
+	}
 }

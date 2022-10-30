@@ -15,15 +15,15 @@ type ComponentExecutorImpl struct {
 
 type InstanceExecutorImpl struct {
 	InstanceId     int
-	FnWrapper      func()             // wrapper function for fn
-	Fn             func() bool        // process function, need to specific implementation for user logic
-	EventCollector []engine.Event     // accept events from user logic
-	Incoming       *engine.EventQueue // for upstream processes
-	Outgoing       *engine.EventQueue // for downstream processes
+	FnWrapper      func()                                 // wrapper function for fn
+	Fn             func() bool                            // process function, need to specific implementation for user logic
+	EventCollector engine.EventCollector                  // accept events from user logic
+	Incoming       engine.EventQueue                      // for upstream processes
+	OutgoingMap    map[engine.Channel][]engine.EventQueue // for downstream processes
 }
 
 type EventCollector struct {
-	DEFAULT_CHANNEL  engine.Channel
+	defaultChannel   engine.Channel
 	List             map[engine.Channel][]engine.Event
 	RegisterChannels map[engine.Channel]engine.Void
 }

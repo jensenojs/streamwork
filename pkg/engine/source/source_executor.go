@@ -21,6 +21,6 @@ func NewSourceExecutor(so engine.Source) *SourceExecutor {
 	return se
 }
 
-func (s *SourceExecutor) SetIncomings(queues []*engine.EventQueue) {
+func (s *SourceExecutor) SetIncomings(queues []engine.EventQueue) {
 	panic("No incoming queue is allowed for source executor")
 }

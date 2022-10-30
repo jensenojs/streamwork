@@ -20,6 +20,6 @@ type JobStarter struct {
 	queue_size     int
 	job            *Job                       // the job to start
 	executorList   []engine.ComponentExecutor // list of executors
-	connectionList []*transport.Connection    // connections between component executors
-	dispatcherList []*EventDispatcher
+	connectionList []*Connection              // connections between component executors
+	dispatcherList []*transport.EventDispatcher
 }

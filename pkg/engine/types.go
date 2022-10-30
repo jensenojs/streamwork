@@ -18,18 +18,15 @@ type Stream interface {
  * The base class for all components, including Source and Operator.
  */
 type Component interface {
-	SetName(name string)
-
 	GetName() string
 
-	SetOutgoingStream()
-
 	// Get the outgoing event stream of this component. The stream is used to connect the downstream components.
-	// It should (but can't) be Stream.stream
 	GetOutgoingStream() Stream
 
 	// Get the parallelism (number of instances) of this component.
 	GetParallelism() int
+
+	SetOutgoingStream()
 }
 
 /**
@@ -44,7 +41,7 @@ type Operator interface {
 	 * @param event The incoming event
 	 * @param eventCollector The outgoing event collector
 	 */
-	Apply(Event, *[]Event) error
+	Apply(Event, EventCollector) error
 
 	// set up instance
 	SetupInstance(instanceId int)
@@ -61,15 +58,13 @@ type Source interface {
 	 * The function is abstract and needs to be implemented by users.
 	 * @param eventCollector The outgoing event collector
 	 */
-	GetEvents(eventCollector *[]Event)
+	GetEvents(EventCollector)
 
 	// set up instance
 	SetupInstance(instanceId int)
 }
 
-/**
- * The base class for executors of source and operator.
- */
+// ComponentExecutor is a interface for executors of source and operator.
 type ComponentExecutor interface {
 	Component
 	process.Process
@@ -77,9 +72,9 @@ type ComponentExecutor interface {
 	// Get the instance executors of this component executor.
 	GetInstanceExecutors() []InstanceExecutor
 
-	SetIncomings(queues []*EventQueue)
+	SetIncomings([]EventQueue)
 
-	SetOutgoing(queue *EventQueue)
+	AddOutgoing(Channel, EventQueue)
 
 	Start()
 }
@@ -91,9 +86,9 @@ type ComponentExecutor interface {
 type InstanceExecutor interface {
 	process.Process
 
-	SetIncoming(in *EventQueue)
+	SetIncoming(EventQueue)
 
-	SetOutgoing(out *EventQueue)
+	AddOutgoing(Channel, EventQueue)
 }
 
 /**
@@ -105,9 +100,21 @@ type Event interface {
 	GetData() any
 }
 
-/**
- * This is the class for intemediate event queues between processes.
- */
-type EventQueue struct {
-	Queue chan Event
+// EventQueue is a interface for intemediate event queues between processes.
+type EventQueue interface {
+	Take() Event
+	Send(Event)
+}
+
+// EventCollector is a field for component to help manage event dispatch
+type EventCollector interface {
+	GetRegisteredChannels() []Channel
+	SetRegisterChannel(Channel)
+
+	GetEventList(Channel) []Event
+
+	Add(Event)
+	Addto(Event, Channel)
+
+	Clear()
 }

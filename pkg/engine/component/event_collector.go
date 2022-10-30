@@ -4,7 +4,7 @@ import "streamwork/pkg/engine"
 
 func NewEventCollector() *EventCollector {
 	return &EventCollector{
-		DEFAULT_CHANNEL:  engine.DEFAULT_CHANNEL,
+		defaultChannel:   engine.DEFAULT_CHANNEL,
 		List:             make(map[engine.Channel][]engine.Event),
 		RegisterChannels: make(map[engine.Channel]engine.Void),
 	}
@@ -32,7 +32,7 @@ func (e *EventCollector) GetEventList(ch engine.Channel) []engine.Event {
 }
 
 func (e *EventCollector) Add(ev engine.Event) {
-	e.Addto(ev, e.DEFAULT_CHANNEL)
+	e.Addto(ev, e.defaultChannel)
 }
 
 func (e *EventCollector) Addto(ev engine.Event, ch engine.Channel) {

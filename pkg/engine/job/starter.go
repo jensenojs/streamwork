@@ -74,7 +74,7 @@ func (j *JobStarter) setupConnections() {
 // Note that in this version, there is no shared "from" component and "to" component.
 // The job looks like a single linked list.
 func (j *JobStarter) connectExecutors(connection *transport.Connection) {
-	d := NewEventDispatcher(connection.To)
+	d := transport.NewEventDispatcher(connection.To)
 	j.dispatcherList = append(j.dispatcherList, d)
 
 	// connect to upstream
@@ -84,7 +84,7 @@ func (j *JobStarter) connectExecutors(connection *transport.Connection) {
 
 	// connect to downstream (to each instance)
 	p := connection.To.GetParallelism()
-	ds := make([]*engine.EventQueue, p)
+	ds := make([]engine.EventQueue, p)
 	for i := range ds {
 		ds[i] = transport.NewEventQueue(j.queue_size)
 	}
