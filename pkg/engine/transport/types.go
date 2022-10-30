@@ -8,7 +8,7 @@ import (
 // EventDispatcher is responsible for transporting events from
 // the incoming queue to the outgoing queues with a grouping strategy.
 type EventDispatcher struct {
-	fnWrapper          func() // wrapper function for fn, no need for fn
+	fnWrapper          func() // wrapper function for RunOnce. It has nothing to do with user configuration logic, so there is no need for fn
 	downStreamExecutor *operator.OperatorExecutor
 	incoming           engine.EventQueue
 	outgoings          []engine.EventQueue
@@ -20,4 +20,3 @@ type EventDispatcher struct {
 type EventQueue struct {
 	Queue chan engine.Event
 }
-

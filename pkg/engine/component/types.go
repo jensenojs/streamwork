@@ -15,9 +15,9 @@ type ComponentExecutorImpl struct {
 
 type InstanceExecutorImpl struct {
 	InstanceId     int
-	FnWrapper      func()                                 // wrapper function for fn
-	Fn             func() bool                            // process function, need to specific implementation for user logic
-	EventCollector engine.EventCollector                  // accept events from user logic
+	FnWrapper      func()                                 // wrapper function for fn to run continuously
+	Fn             func() bool                            // process function runOnce, need to specific implementation for user logic
+	EventCollector engine.EventCollector                  // help manage event dispatch
 	Incoming       engine.EventQueue                      // for upstream processes
 	OutgoingMap    map[engine.Channel][]engine.EventQueue // for downstream processes
 }

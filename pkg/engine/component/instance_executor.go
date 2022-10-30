@@ -62,3 +62,7 @@ func (i *InstanceExecutorImpl) AddOutgoing(ch engine.Channel, out engine.EventQu
 		i.OutgoingMap[ch] = l
 	}
 }
+
+func (i *InstanceExecutorImpl) RegisterChannel(ch engine.Channel) {
+	i.EventCollector.SetRegisterChannel(ch)
+}

@@ -4,9 +4,9 @@ import "streamwork/pkg/engine/process"
 
 type Void struct{}
 
-type Channel = string
-
 var Member Void
+
+type Channel = string
 
 const DEFAULT_CHANNEL = "default"
 
@@ -25,8 +25,6 @@ type Component interface {
 
 	// Get the parallelism (number of instances) of this component.
 	GetParallelism() int
-
-	SetOutgoingStream()
 }
 
 /**
@@ -76,7 +74,7 @@ type ComponentExecutor interface {
 
 	AddOutgoing(Channel, EventQueue)
 
-	Start()
+	RegisterChannel(Channel)
 }
 
 /**
@@ -89,6 +87,8 @@ type InstanceExecutor interface {
 	SetIncoming(EventQueue)
 
 	AddOutgoing(Channel, EventQueue)
+
+	RegisterChannel(Channel)
 }
 
 /**

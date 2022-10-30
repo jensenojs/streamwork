@@ -2,8 +2,17 @@ package transport
 
 import "streamwork/pkg/engine"
 
-func NewEventQueue(size int) EventQueue {
-	return EventQueue{
+func NewEventQueue(arg ...int) *EventQueue {
+	var size int
+	if (len(arg) == 0) {
+		size = 64
+	} else if (len(arg) == 1){
+		size = arg[0]
+	} else {
+		panic("Too many arguments for event queue init")
+	}
+
+	return &EventQueue{
 		Queue: make(chan engine.Event, size),
 	}
 }

@@ -51,6 +51,12 @@ func (c *ComponentExecutorImpl) AddOutgoing(ch engine.Channel, qu engine.EventQu
 	}
 }
 
+func (c *ComponentExecutorImpl) RegisterChannel(ch engine.Channel) {
+	for i := range c.InstanceExecutors {
+		c.InstanceExecutors[i].RegisterChannel(ch)
+	}
+}
+
 // =================================================================
 // implement for process
 
