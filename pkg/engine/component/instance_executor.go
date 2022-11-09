@@ -57,7 +57,7 @@ func (i *InstanceExecutorImpl) AddOutgoing(ch engine.Channel, out engine.EventQu
 	if c, ok := i.OutgoingMap[ch]; ok {
 		c = append(c, out)
 	} else {
-		l := make([]engine.EventQueue, 0)
+		l := make([]engine.EventQueue, 1)
 		l[0] = out
 		i.OutgoingMap[ch] = l
 	}

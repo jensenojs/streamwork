@@ -1,6 +1,7 @@
 package vehicle_count_job
 
 import (
+	"fmt"
 	"log"
 	"net"
 	"os"
@@ -56,11 +57,11 @@ func (s *SensorReader) GetEvents(eventCollector engine.EventCollector) {
 	if s.clone {
 		eventCollector.Addto(NewVehicleEvent(vehicle+"clone"), "clone")
 	}
-	log.Printf("SensorReader%s(%d) --> %s\n", s.GetName(), s.instanceId, vehicle)
+	fmt.Printf("%s:(%d) --> %s\n", s.GetName(), s.instanceId, vehicle)
 }
 
 func (s *SensorReader) setupSocketReader(port int) {
-	log.Printf("SensorReader begin to monitor")
+	fmt.Printf("SensorReader begin to monitor\n")
 
 	listener, err := net.Listen(jobs.ConnType, jobs.ConnHost+":"+strconv.FormatInt(int64(port), 10))
 	if err != nil {

@@ -12,6 +12,7 @@ func NewOperatorExecutorInstance(Id int, op engine.Operator) *OperatorInstanceEx
 	opi.operator.SetupInstance(Id) // really need this?
 	opi.SetRunOnce(opi.RunOnce)
 	opi.EventCollector = component.NewEventCollector()
+	opi.OutgoingMap = make(map[engine.Channel][]engine.EventQueue)
 	return opi
 }
 
@@ -19,7 +20,7 @@ func (o *OperatorInstanceExecutor) RunOnce() bool {
 	// read input
 	event := o.TakeIncomingEvent()
 	if event == nil {
-		return false
+		panic("receive nil event")
 	}
 
 	// apply operatorion

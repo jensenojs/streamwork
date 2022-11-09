@@ -12,6 +12,7 @@ func NewSourceExecutorInstance(id int, so engine.Source) *SourceInstanceExecutor
 	soi.source.SetupInstance(id) // really need this?
 	soi.SetRunOnce(soi.RunOnce)
 	soi.EventCollector = component.NewEventCollector()
+	soi.OutgoingMap = make(map[engine.Channel][]engine.EventQueue)
 	return soi
 }
 

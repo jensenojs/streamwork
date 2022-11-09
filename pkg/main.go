@@ -13,7 +13,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	brigdeStream.ApplyOperator(vehicle_count_job.NewVehicleCounter("vehicle counter", 3))
+	brigdeStream.ApplyOperator(vehicle_count_job.NewVehicleCounter("vehicle counter"))
 
 	fmt.Println("This is a streaming job that counts vehicles in real time. " +
 		"Please enter vehicle types like 'car' and 'truck' in the input terminal " +

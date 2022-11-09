@@ -11,8 +11,10 @@ import (
 
 func NewJobStarter(job *Job) *JobStarter {
 	return &JobStarter{
-		queue_size: 64, // default queue size
-		job:        job,
+		queue_size:       64, // default queue size
+		operatorMap:      make(map[engine.Operator]*operator.OperatorExecutor),
+		operatorQueueMap: make(map[*operator.OperatorExecutor]*transport.EventQueue),
+		job:              job,
 	}
 }
 

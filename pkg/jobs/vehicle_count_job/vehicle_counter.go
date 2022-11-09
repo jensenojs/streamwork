@@ -1,7 +1,7 @@
 package vehicle_count_job
 
 import (
-	"log"
+	"fmt"
 	"sort"
 	"streamwork/pkg/engine"
 	"streamwork/pkg/engine/transport/strategy"
@@ -37,7 +37,7 @@ func (v *VehicleCounter) Apply(vehicleEvent engine.Event, eventCollector engine.
 	vehicle := vehicleEvent.(*VehicleEvent).GetData().(carType)
 	v.counter[vehicle] = v.counter[vehicle] + 1
 
-	log.Printf("VehicleCounter(%d) --> \n", v.instanceId)
+	fmt.Printf("%s:(%d) --> \n", v.GetName(), v.instanceId)
 	v.printCountMap()
 	return nil
 }
@@ -50,6 +50,6 @@ func (v *VehicleCounter) printCountMap() {
 	sort.Strings(keys)
 
 	for _, k := range keys {
-		log.Printf("  "+"%s : "+"%d\n", k, v.counter[k])
+		fmt.Printf("  "+"%s : "+"%d\n", k, v.counter[k])
 	}
 }
