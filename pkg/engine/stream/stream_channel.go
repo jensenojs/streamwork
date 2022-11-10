@@ -12,3 +12,8 @@ func NewStreamChannel(s *Stream, ch engine.Channel) *StreamChannel {
 func (sc *StreamChannel) ApplyOperator(op engine.Operator) (engine.Stream, error) {
 	return sc.basestream.applyOperator(sc.channel, op)
 }
+
+func (sc *StreamChannel) SelectChannel(engine.Channel) engine.Stream {
+	panic("should not call selectChannel in StreamChannel")
+	// return nil
+}

@@ -37,7 +37,7 @@ func (e *EventCollector) Add(ev engine.Event) {
 func (e *EventCollector) Addto(ev engine.Event, ch engine.Channel) {
 	// If the channel is registered, add the event to the corresponding list.
 	if _, ok := e.RegisterChannels[ch]; !ok {
-		panic("unknown channel")
+		return // if Addto Called from Add, maybe the ChannelName is not DEFAULT_CHANNEL, so just ignore
 	}
 
 	l := e.List[ch]

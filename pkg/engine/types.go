@@ -12,6 +12,7 @@ const DEFAULT_CHANNEL = "default"
 
 type Stream interface {
 	ApplyOperator(Operator) (Stream, error)
+	SelectChannel(Channel) Stream // need more docs here
 }
 
 /**

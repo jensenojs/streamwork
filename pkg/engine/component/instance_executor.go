@@ -6,6 +6,9 @@ import (
 
 // TakeIncomingEvent is a helper function to receive events
 func (i *InstanceExecutorImpl) TakeIncomingEvent() engine.Event {
+	if i.Incoming == nil {
+		panic("Queue should not be nil")
+	}
 	return i.Incoming.Take()
 }
 

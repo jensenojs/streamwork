@@ -17,6 +17,7 @@ func (v *VehicleEvent) IsEvent() {}
 // SensorReader is a monitor on the brigde, Track how many cars are passing by. specific to the type of the car
 type SensorReader struct {
 	source.SourceExecutor
+	ln         net.Listener
 	conn       net.Conn
 	instanceId int
 	portBase   int

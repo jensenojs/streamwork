@@ -15,7 +15,7 @@ type Stream struct {
 }
 
 type Streams struct {
-	array []Stream
+	array []engine.Stream
 }
 
 // Example:

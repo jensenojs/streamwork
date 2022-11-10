@@ -2,8 +2,8 @@ package stream
 
 import "streamwork/pkg/engine"
 
-func Of(ss ...Stream) *Streams {
-	a := make([]Stream, len(ss))
+func Of(ss ...engine.Stream) *Streams {
+	a := make([]engine.Stream, len(ss))
 	for i, s := range ss {
 		a[i] = s
 	}

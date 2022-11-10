@@ -9,8 +9,7 @@ import (
 
 func NewVehicleCounter(name string, args ...any) *VehicleCounter {
 	var v = &VehicleCounter{
-		counter:    make(map[carType]int),
-		instanceId: 0,
+		counter: make(map[carType]int),
 	}
 
 	switch len(args) {

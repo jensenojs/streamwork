@@ -63,9 +63,9 @@ func (j *JobStarter) traverseComponent(from engine.Component, fromExe engine.Com
 			} else {
 				toExe = j.operatorMap[to]
 			}
+			// setup executors for the downstream operators
+			j.connectionList = append(j.connectionList, NewConnection(fromExe, toExe, ch))
 		}
-		// setup executors for the downstream operators
-		j.connectionList = append(j.connectionList, NewConnection(fromExe, toExe, ch))
 	}
 }
 

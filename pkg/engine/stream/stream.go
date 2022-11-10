@@ -34,7 +34,7 @@ func (s *Stream) applyOperator(ch engine.Channel, op engine.Operator) (engine.St
 	return op.GetOutgoingStream(), nil
 }
 
-func (s *Stream) selectChannel(ch engine.Channel) *StreamChannel {
+func (s *Stream) SelectChannel(ch engine.Channel) engine.Stream {
 	return NewStreamChannel(s, ch)
 }
 

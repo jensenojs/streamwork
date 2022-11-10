@@ -28,8 +28,8 @@ func (c *ComponentExecutorImpl) Init(name string, parallelism int) {
 	if parallelism < 0 || parallelism > 10 {
 		panic("Inappropriate parallelism number")
 	}
-	c.Parallelism = parallelism
 	c.Name = name
+	c.Parallelism = parallelism
 }
 
 // =================================================================
