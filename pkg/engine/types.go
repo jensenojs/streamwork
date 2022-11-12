@@ -54,10 +54,7 @@ type Source interface {
 	 * The function is abstract and needs to be implemented by users.
 	 * @param eventCollector The outgoing event collector
 	 */
-	GetEvents(EventCollector)
-
-	// set up instance
-	SetupInstance(instanceId int)
+	GetEvents([]byte, int, EventCollector)
 }
 
 // ComponentExecutor is a interface for executors of source and operator.

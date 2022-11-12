@@ -10,9 +10,10 @@ func NewOperatorExecutorInstance(Id int, op engine.Operator) *OperatorInstanceEx
 	var opi = new(OperatorInstanceExecutor)
 	opi.InstanceId = Id
 	opi.operator = op
-	opi.SetRunOnce(opi.RunOnce)
 	opi.EventCollector = component.NewEventCollector()
 	opi.OutgoingMap = make(map[engine.Channel][]engine.EventQueue)
+
+	opi.SetRunOnce(opi.RunOnce)
 	return opi
 }
 
