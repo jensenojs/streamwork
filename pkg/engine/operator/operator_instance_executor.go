@@ -1,6 +1,7 @@
 package operator
 
 import (
+	"fmt"
 	"streamwork/pkg/engine"
 	"streamwork/pkg/engine/component"
 )
@@ -9,7 +10,6 @@ func NewOperatorExecutorInstance(Id int, op engine.Operator) *OperatorInstanceEx
 	var opi = new(OperatorInstanceExecutor)
 	opi.InstanceId = Id
 	opi.operator = op
-	opi.operator.SetupInstance(Id) // really need this?
 	opi.SetRunOnce(opi.RunOnce)
 	opi.EventCollector = component.NewEventCollector()
 	opi.OutgoingMap = make(map[engine.Channel][]engine.EventQueue)
@@ -24,6 +24,7 @@ func (o *OperatorInstanceExecutor) RunOnce() bool {
 	}
 
 	// apply operatorion
+	fmt.Printf("%s:(%d) --> \n", o.operator.GetName(), o.InstanceId)
 	o.operator.Apply(event, o.EventCollector)
 
 	// emit out : should work.?

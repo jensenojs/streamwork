@@ -41,9 +41,6 @@ type Operator interface {
 	 * @param eventCollector The outgoing event collector
 	 */
 	Apply(Event, EventCollector) error
-
-	// set up instance
-	SetupInstance(instanceId int)
 }
 
 /**

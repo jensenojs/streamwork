@@ -9,7 +9,6 @@ import (
 
 func NewOperatorExecutor(op engine.Operator) *OperatorExecutor {
 	oe := &OperatorExecutor{
-		op: op,
 		gs: strategy.NewShuffleGrouping(), // default group strategy is round robin
 	}
 	oe.Parallelism = op.GetParallelism()

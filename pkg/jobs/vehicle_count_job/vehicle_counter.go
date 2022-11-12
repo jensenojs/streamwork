@@ -28,15 +28,11 @@ func NewVehicleCounter(name string, args ...any) *VehicleCounter {
 
 // =================================================================
 // implement for Operator
-func (v *VehicleCounter) SetupInstance(instanceId int) {
-	v.instanceId = instanceId
-}
 
 func (v *VehicleCounter) Apply(vehicleEvent engine.Event, eventCollector engine.EventCollector) error {
 	vehicle := vehicleEvent.(*VehicleEvent).GetData().(carType)
 	v.counter[vehicle] = v.counter[vehicle] + 1
 
-	fmt.Printf("%s:(%d) --> \n", v.GetName(), v.instanceId)
 	v.printCountMap()
 	return nil
 }

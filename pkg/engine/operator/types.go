@@ -13,7 +13,6 @@ import (
 // Used to inherited by specific operator
 type OperatorExecutor struct {
 	component.ComponentExecutorImpl
-	op engine.Operator        // specific operator, used to execute apply
 	gs strategy.GroupStrategy // group strategy, different from origin implementation, place strategy in operatorExecutor but not operator
 }
 

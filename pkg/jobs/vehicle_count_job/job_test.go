@@ -10,7 +10,7 @@ import (
 )
 
 func TestBase(t *testing.T) {
-	vehicleJob := job.NewJob("vehicle count")
+	vehicleJob := job.NewJob("vehicle count base test")
 	brigdeStream, err := vehicleJob.AddSource(NewSensorReader("sensor-reader"))
 	if err != nil {
 		panic(err)
@@ -26,7 +26,7 @@ func TestBase(t *testing.T) {
 }
 
 func TestParallelForSensor(t *testing.T) {
-	vehicleJob := job.NewJob("vehicle count")
+	vehicleJob := job.NewJob("vehicle count sensor parallel test ")
 	brigdeStream, err := vehicleJob.AddSource(NewSensorReader("sensor-reader", 2))
 	if err != nil {
 		panic(err)
@@ -35,14 +35,14 @@ func TestParallelForSensor(t *testing.T) {
 
 	fmt.Printf("This test is to test the parallelism of Sensor" + "\n" +
 		"please open two terminals and connect with the corresponding port number respectively. " + "\n" +
-		"the default port number is 9990(e.g. nc localhost 9990)\n")
+		"the default port number is 9990 and 9991(e.g. nc localhost 9990; nc localhost 9991)\n")
 
 	starter := job.NewJobStarter(vehicleJob)
 	starter.Start()
 }
 
 func TestParallelForCounter(t *testing.T) {
-	vehicleJob := job.NewJob("vehicle count")
+	vehicleJob := job.NewJob("vehicle count counter parallel test")
 	brigdeStream, err := vehicleJob.AddSource(NewSensorReader("sensor-reader"))
 	if err != nil {
 		panic(err)
@@ -50,7 +50,8 @@ func TestParallelForCounter(t *testing.T) {
 	brigdeStream.ApplyOperator(NewVehicleCounter("vehicle counter", 2))
 
 	fmt.Printf("This test is to test the parallelism of Counter" + "\n" +
-		"please open two terminals and connect with the corresponding port number respectively. " + "\n" +
+		"Please enter vehicle types like 'car' and 'truck' in the input terminal " + "\n" +
+		"and look at the output" + "\n" +
 		"the default port number is 9990(e.g. nc localhost 9990)\n")
 
 	starter := job.NewJobStarter(vehicleJob)
@@ -58,7 +59,7 @@ func TestParallelForCounter(t *testing.T) {
 }
 
 func TestParallelBoth(t *testing.T) {
-	vehicleJob := job.NewJob("vehicle count")
+	vehicleJob := job.NewJob("vehicle count parallel test")
 	brigdeStream, err := vehicleJob.AddSource(NewSensorReader("sensor-reader", 2))
 	if err != nil {
 		panic(err)

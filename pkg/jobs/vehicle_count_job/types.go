@@ -27,6 +27,5 @@ type SensorReader struct {
 // VehicleCounter is a counter
 type VehicleCounter struct {
 	operator.OperatorExecutor
-	counter    map[carType]int
-	instanceId int
+	counter map[carType]int
 }
