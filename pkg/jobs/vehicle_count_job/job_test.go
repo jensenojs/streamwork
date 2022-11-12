@@ -78,7 +78,7 @@ func TestParallelBoth(t *testing.T) {
 
 func TestFork(t *testing.T) {
 	vehicleJob := job.NewJob("vehicle count(fork)")
-	brigdeStream, err := vehicleJob.AddSource(NewSensorReader("sensor-reader", 1, 9990, false))
+	brigdeStream, err := vehicleJob.AddSource(NewSensorReader("sensor-reader", 1, false))
 	if err != nil {
 		panic(err)
 	}
@@ -97,7 +97,7 @@ func TestFork(t *testing.T) {
 
 func TestSplit(t *testing.T) {
 	vehicleJob := job.NewJob("vehicle count(split)")
-	brigdeStream, err := vehicleJob.AddSource(NewSensorReader("sensor-reader", 1, 9990, true))
+	brigdeStream, err := vehicleJob.AddSource(NewSensorReader("sensor-reader", 1, true))
 	if err != nil {
 		panic(err)
 	}
@@ -117,11 +117,11 @@ func TestSplit(t *testing.T) {
 
 func TestMerge(t *testing.T) {
 	vehicleJob := job.NewJob("vehicle count(merge)")
-	brigdeStream1, err := vehicleJob.AddSource(NewSensorReader("sensor-reader1", 1, 9990, false))
+	brigdeStream1, err := vehicleJob.AddSource(NewSensorReader("sensor-reader1", 1, false))
 	if err != nil {
 		panic(err)
 	}
-	brigdeStream2, err := vehicleJob.AddSource(NewSensorReader("sensor-reader2", 1, 9991, true))
+	brigdeStream2, err := vehicleJob.AddSource(NewSensorReader("sensor-reader2", 1, true))
 	if err != nil {
 		panic(err)
 	}

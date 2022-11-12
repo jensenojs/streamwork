@@ -7,7 +7,8 @@ import (
 )
 
 func NewSourceExecutor(so engine.Source) *SourceExecutor {
-	se := &SourceExecutor{}
+	se := new(SourceExecutor)
+	se.Name = so.GetName()
 	se.Parallelism = so.GetParallelism()
 	se.InstanceExecutors = make([]engine.InstanceExecutor, se.Parallelism)
 	se.PortBase = ConnPort

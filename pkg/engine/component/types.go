@@ -5,6 +5,12 @@ import (
 	"streamwork/pkg/engine/stream"
 )
 
+type Component struct {
+	Name        string
+	Parallelism int
+	Stream      engine.Stream
+}
+
 // ComponentExecutorImpl used to Inherited by OperatorExecutor and SourceExecutor to save the implementation of some methods.
 type ComponentExecutorImpl struct {
 	Name              string

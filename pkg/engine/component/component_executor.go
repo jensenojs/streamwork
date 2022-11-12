@@ -13,23 +13,17 @@ func (c *ComponentExecutorImpl) GetName() string {
 }
 
 func (c *ComponentExecutorImpl) GetOutgoingStream() engine.Stream {
+	if c.Stream == nil {
+		c.Stream = stream.NewStream()
+	}
 	return c.Stream
 }
 
 func (c *ComponentExecutorImpl) GetParallelism() int {
+	if c.Parallelism <= 0 || c.Parallelism > 10 {
+		panic("An inappropriate number of concurrent requests")
+	}
 	return c.Parallelism
-}
-
-// Init is a helper function to init a instance executor
-func (c *ComponentExecutorImpl) Init(name string, parallelism int) {
-	if c.Stream == nil {
-		c.Stream = stream.NewStream()
-	}
-	if parallelism < 0 || parallelism > 10 {
-		panic("Inappropriate parallelism number")
-	}
-	c.Name = name
-	c.Parallelism = parallelism
 }
 
 // =================================================================

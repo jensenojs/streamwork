@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"sort"
 	"streamwork/pkg/engine"
-	"streamwork/pkg/engine/transport/strategy"
 )
 
 func NewVehicleCounter(name string, args ...any) *VehicleCounter {
@@ -12,14 +11,15 @@ func NewVehicleCounter(name string, args ...any) *VehicleCounter {
 		counter: make(map[carType]int),
 	}
 
+	v.Name = name
 	switch len(args) {
 	case 0:
-		v.Init(name, 1)
+		v.Parallelism = 1
 	case 1:
-		v.Init(name, args[0].(int))
+		v.Parallelism = args[0].(int)
 	case 2:
-		v.Init(name, args[0].(int))
-		v.SetGroupingStrategy(args[1].(strategy.GroupStrategy)) // in fact, default strategy is round-robin
+		v.Parallelism = args[0].(int)
+		v.Strategy = (args[1].(engine.GroupStrategy)) // default strategy is round-robin
 	default:
 		panic("too many arguments for NewVehicleCounter")
 	}
@@ -46,4 +46,8 @@ func (v *VehicleCounter) printCountMap() {
 	for _, k := range keys {
 		fmt.Printf("  "+"%s : "+"%d\n", k, v.counter[k])
 	}
+}
+
+func (v *VehicleCounter) GetGroupingStrategy() engine.GroupStrategy {
+	return v.Strategy
 }

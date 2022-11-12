@@ -3,8 +3,12 @@ package operator
 import (
 	"streamwork/pkg/engine"
 	"streamwork/pkg/engine/component"
-	"streamwork/pkg/engine/transport/strategy"
 )
+
+type Operator struct {
+	component.Component
+	Strategy engine.GroupStrategy
+}
 
 // The executor for operator components. When the executor is started,
 // a new thread is created to call the apply() function of
@@ -13,7 +17,7 @@ import (
 // Used to inherited by specific operator
 type OperatorExecutor struct {
 	component.ComponentExecutorImpl
-	gs strategy.GroupStrategy // group strategy, different from origin implementation, place strategy in operatorExecutor but not operator
+	gs engine.GroupStrategy // group strategy, different from origin implementation, place strategy in operatorExecutor but not operator
 }
 
 type OperatorInstanceExecutor struct {

@@ -12,6 +12,11 @@ const (
 	ConnPort = 9990 //default port number
 )
 
+type Source struct {
+	component.Component
+	Clone bool
+}
+
 // The executor for source components. When the executor is started,
 // a new thread is created to call the getEvents() function of
 // the source component repeatedly.

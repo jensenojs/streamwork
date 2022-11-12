@@ -1,7 +1,6 @@
 package vehicle_count_job
 
 import (
-	"net"
 	"streamwork/pkg/engine/operator"
 	"streamwork/pkg/engine/source"
 )
@@ -16,16 +15,12 @@ func (v *VehicleEvent) IsEvent() {}
 
 // SensorReader is a monitor on the brigde, Track how many cars are passing by. specific to the type of the car
 type SensorReader struct {
-	source.SourceExecutor
-	ln         net.Listener
-	conn       net.Conn
-	instanceId int
-	portBase   int
-	clone      bool
+	source.Source
 }
 
 // VehicleCounter is a counter
 type VehicleCounter struct {
-	operator.OperatorExecutor
+	operator.Operator
+
 	counter map[carType]int
 }

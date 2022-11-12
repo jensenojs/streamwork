@@ -41,6 +41,9 @@ type Operator interface {
 	 * @param eventCollector The outgoing event collector
 	 */
 	Apply(Event, EventCollector) error
+
+	// If you don't want to set GroupStrategy, just return nil
+	GetGroupingStrategy() GroupStrategy
 }
 
 /**
@@ -58,8 +61,9 @@ type Source interface {
 }
 
 // ComponentExecutor is a interface for executors of source and operator.
+// Although it does not explicitly require a method to implement the component, it does.
+// We need this way to get information about the corresponding component.
 type ComponentExecutor interface {
-	Component
 	process.Process
 
 	// Get the instance executors of this component executor.
@@ -84,6 +88,15 @@ type InstanceExecutor interface {
 	AddOutgoing(Channel, EventQueue)
 
 	RegisterChannel(Channel)
+}
+
+// Get target instance id from an event and component parallelism.
+// Note that in this implementation, only one instance is selected.
+// This can be easily extended if needed.
+type GroupStrategy interface {
+	// the event object to route to the component
+	// the parallelism of the component
+	GetInstance(event Event, parallelism int) int
 }
 
 /**

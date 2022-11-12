@@ -3,26 +3,20 @@ package vehicle_count_job
 import (
 	"fmt"
 	"streamwork/pkg/engine"
-	"streamwork/pkg/jobs"
 )
 
 func NewSensorReader(name string, args ...any) *SensorReader {
-	var s = &SensorReader{}
+	s := new(SensorReader)
+	s.Name = name
 
 	switch len(args) {
 	case 0:
-		s.Init(name, 1)
-		s.portBase = jobs.ConnPort
+		s.Parallelism = 1
 	case 1:
-		s.Init(name, args[0].(int))
-		s.portBase = jobs.ConnPort
+		s.Parallelism = args[0].(int)
 	case 2:
-		s.Init(name, args[0].(int))
-		s.portBase = args[1].(int)
-	case 3:
-		s.Init(name, args[0].(int))
-		s.portBase = args[1].(int)
-		s.clone = args[2].(bool)
+		s.Parallelism = args[0].(int)
+		s.Clone = args[1].(bool)
 	default:
 		panic("too many arguments for NewSensorReader")
 	}
@@ -37,7 +31,7 @@ func (s *SensorReader) GetEvents(buf []byte, num int, e engine.EventCollector) {
 	// This source emits events into two channels.
 	v := string(buf[:num-1])
 	e.Add(NewVehicleEvent(v))
-	if s.clone {
+	if s.Clone {
 		e.Addto(NewVehicleEvent(v+"-clone"), "clone")
 	}
 	fmt.Printf("%s\n", v)

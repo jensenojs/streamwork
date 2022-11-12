@@ -28,7 +28,7 @@ func (j *JobStarter) Start() {
 	// start all the processes.
 	j.startProcesses()
 
-	// let main.go running forever
+	// let main.go running
 	for {
 
 	}

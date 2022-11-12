@@ -8,10 +8,16 @@ import (
 )
 
 func NewOperatorExecutor(op engine.Operator) *OperatorExecutor {
-	oe := &OperatorExecutor{
-		gs: strategy.NewShuffleGrouping(), // default group strategy is round robin
-	}
+	oe := new(OperatorExecutor)
+	oe.Name = op.GetName()
 	oe.Parallelism = op.GetParallelism()
+	s := op.GetGroupingStrategy()
+	if s == nil {
+		oe.gs = strategy.NewShuffleGrouping()
+	} else {
+		oe.gs = s
+	}
+
 	oe.InstanceExecutors = make([]engine.InstanceExecutor, oe.Parallelism)
 	for i := range oe.InstanceExecutors {
 		// need clone new operator but not use the same one
@@ -22,10 +28,10 @@ func NewOperatorExecutor(op engine.Operator) *OperatorExecutor {
 	return oe
 }
 
-func (o *OperatorExecutor) GetGroupingStrategy() strategy.GroupStrategy {
+func (o *OperatorExecutor) GetGroupingStrategy() engine.GroupStrategy {
 	return o.gs
 }
 
-func (o *OperatorExecutor) SetGroupingStrategy(gs strategy.GroupStrategy) {
+func (o *OperatorExecutor) SetGroupingStrategy(gs engine.GroupStrategy) {
 	o.gs = gs
 }
