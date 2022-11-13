@@ -7,6 +7,6 @@ func NewVehicleEvent(Type string) *VehicleEvent {
 }
 
 // implement for Event interface
-func (v *VehicleEvent) GetType() carType {
+func (v *VehicleEvent) GetKey() carType {
 	return v.Type
 }

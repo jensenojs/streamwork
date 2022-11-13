@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"streamwork/pkg/engine/job"
+	"streamwork/pkg/engine/transport/strategy"
 	"streamwork/pkg/jobs/vehicle_count_job"
 )
 
@@ -13,7 +14,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	brigdeStream.ApplyOperator(vehicle_count_job.NewVehicleCounter("vehicle counter"))
+	brigdeStream.ApplyOperator(vehicle_count_job.NewVehicleCounter("vehicle counter", 3, strategy.NewFieldGrouping()))
 
 	fmt.Println("This is a streaming job that counts vehicles in real time. " +
 		"Please enter vehicle types like 'car' and 'truck' in the input terminal " +

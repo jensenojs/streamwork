@@ -106,6 +106,8 @@ type GroupStrategy interface {
 type Event interface {
 	// Get data stored in the event.
 	IsEvent()
+
+	GetKey() string
 }
 
 // EventQueue is a interface for intemediate event queues between processes.
