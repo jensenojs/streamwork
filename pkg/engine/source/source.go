@@ -7,6 +7,6 @@ import (
 // =================================================================
 // implement for Source
 
-func (s *Source) GetEvents([]byte, int, engine.EventCollector) {
+func (s *Source) GetEvents(string, engine.EventCollector) {
 	panic("need to implement GetEvents")
 }

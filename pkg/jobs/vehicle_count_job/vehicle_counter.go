@@ -4,7 +4,14 @@ import (
 	"fmt"
 	"sort"
 	"streamwork/pkg/engine"
+	"streamwork/pkg/engine/operator"
 )
+
+// VehicleCounter is a counter
+type VehicleCounter struct {
+	operator.Operator
+	counter map[carType]int
+}
 
 func NewVehicleCounter(name string, args ...any) *VehicleCounter {
 	var v = &VehicleCounter{

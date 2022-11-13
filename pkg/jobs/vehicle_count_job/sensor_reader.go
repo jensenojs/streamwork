@@ -3,7 +3,13 @@ package vehicle_count_job
 import (
 	"fmt"
 	"streamwork/pkg/engine"
+	"streamwork/pkg/engine/source"
 )
+
+// SensorReader is a monitor on the brigde, Track how many cars are passing by. specific to the type of the car
+type SensorReader struct {
+	source.Source
+}
 
 func NewSensorReader(name string, args ...any) *SensorReader {
 	s := new(SensorReader)
@@ -27,9 +33,8 @@ func NewSensorReader(name string, args ...any) *SensorReader {
 // =================================================================
 // implement for Source
 
-func (s *SensorReader) GetEvents(buf []byte, num int, e engine.EventCollector) {
+func (s *SensorReader) GetEvents(v string, e engine.EventCollector) {
 	// This source emits events into two channels.
-	v := string(buf[:num-1])
 	e.Add(NewVehicleEvent(v))
 	if s.Clone {
 		e.Addto(NewVehicleEvent(v+"-clone"), "clone")

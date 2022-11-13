@@ -25,7 +25,7 @@ func (s *SourceInstanceExecutor) RunOnce() bool {
 	// generate events
 	buf, num := s.GetFromNet()
 	fmt.Printf("%s:(%d) --> ", s.source.GetName(), s.InstanceId)
-	s.source.GetEvents(buf, num, s.EventCollector)
+	s.source.GetEvents(string(buf[:num-1]), s.EventCollector)
 
 	// emit out
 	s.SendOutgoingEvent()

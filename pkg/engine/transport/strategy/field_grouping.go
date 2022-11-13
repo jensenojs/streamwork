@@ -29,7 +29,6 @@ func NewFieldGrouping() *FieldGrouping {
 // Get target instance id from an event and component parallelism.
 func (f *FieldGrouping) GetInstance(event engine.Event, parallelism int) int {
 	// s, ok := f.GetKey(event).(string)
-	// s, ok := f.GetKey(event).(string)
 	s := event.GetKey()
 	// if !ok {
 	// 	panic("only support map for string currently")

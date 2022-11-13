@@ -42,7 +42,8 @@ type Source interface {
 	Component
 
 	// Accept events from external into the system.  The function is abstract and needs to be implemented by users.
-	GetEvents([]byte, int, EventCollector)
+	// GetEvents([]byte, int, EventCollector)
+	GetEvents(string, EventCollector)
 }
 
 // ComponentExecutor is a interface for executors of source and operator. Executors is not a component
