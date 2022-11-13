@@ -28,6 +28,13 @@ func NewOperatorExecutor(op engine.Operator) *OperatorExecutor {
 	return oe
 }
 
+func (o *OperatorExecutor) GetParallelism() int {
+	if o.Parallelism <= 0 || o.Parallelism > 10 {
+		panic("An inappropriate number of concurrent requests")
+	}
+	return o.Parallelism
+}
+
 func (o *OperatorExecutor) GetGroupingStrategy() engine.GroupStrategy {
 	return o.gs
 }
