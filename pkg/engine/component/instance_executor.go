@@ -22,7 +22,7 @@ func (i *InstanceExecutorImpl) Start() {
 }
 
 func (i *InstanceExecutorImpl) RunOnce() bool {
-	panic("Need specific implementation")
+	panic("need specific implementation")
 }
 
 // SetRunOnce is a helper function to set RunOnce during operator / source executor impl init.

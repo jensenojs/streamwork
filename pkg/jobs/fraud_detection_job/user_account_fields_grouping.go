@@ -1,4 +1,24 @@
 package fraud_detection_job
 
+import (
+	"strconv"
+	"streamwork/pkg/engine"
+	"streamwork/pkg/engine/transport/strategy"
+)
+
 // define another filed_grouping strategy here, using userAccount but not Id
-// But currently GetKey is binded in engine.Event, which is not appropriate, later will change it.
+type UserAccountFieldStrategy struct {
+	strategy.FieldGrouping
+}
+
+func NewCarFiledStrategy() *UserAccountFieldStrategy {
+	var ufs = new(UserAccountFieldStrategy)
+	ufs.Map = make(map[string]int)
+	ufs.CustomGetKey = ufs.GetKey
+	return ufs
+}
+
+func (c *UserAccountFieldStrategy) GetKey(e engine.Event) string {
+	t := e.(*TransactionEvent)
+	return strconv.Itoa(t.UserAccount)
+}

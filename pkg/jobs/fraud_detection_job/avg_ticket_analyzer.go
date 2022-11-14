@@ -1,6 +1,7 @@
 package fraud_detection_job
 
 import (
+	"fmt"
 	"streamwork/pkg/engine"
 	"streamwork/pkg/engine/operator"
 )
@@ -34,5 +35,6 @@ func (a *AvgTicketAnalyzer) Apply(e engine.Event, ev engine.EventCollector) erro
 		panic("should be transactionEvent")
 	}
 	ev.Add(NewTransactionSorceEvent(t, 0.0))
+	fmt.Printf("")
 	return nil
 }

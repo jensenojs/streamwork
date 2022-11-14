@@ -51,5 +51,5 @@ func (c *ComponentExecutorImpl) Start() {
 }
 
 func (c *ComponentExecutorImpl) RunOnce() bool {
-	panic("Need specific implementation")
+	panic("need specific implementation")
 }

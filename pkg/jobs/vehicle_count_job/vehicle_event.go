@@ -13,8 +13,3 @@ func NewVehicleEvent(Type string) *VehicleEvent {
 		Type: Type,
 	}
 }
-
-// implement for Event interface
-func (v *VehicleEvent) GetKey() carType {
-	return v.Type
-}

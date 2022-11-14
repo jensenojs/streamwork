@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"streamwork/pkg/engine/job"
 	"streamwork/pkg/engine/stream"
-	"streamwork/pkg/engine/transport/strategy"
 	"testing"
 )
 
@@ -83,7 +82,7 @@ func TestFork(t *testing.T) {
 		panic(err)
 	}
 	brigdeStream.ApplyOperator(NewVehicleCounter("vehicle counter(shuffle grouping)", 2))
-	brigdeStream.ApplyOperator(NewVehicleCounter("vehicle counter(fields grouping)", 2, strategy.NewFieldGrouping()))
+	brigdeStream.ApplyOperator(NewVehicleCounter("vehicle counter(fields grouping)", 2, NewCarFiledStrategy()))
 
 	fmt.Println("This is a streaming job that has two counting operators linked to " + "\n" +
 		"the same input stream. One operator is configured with default " + "\n" +
@@ -102,7 +101,7 @@ func TestSplit(t *testing.T) {
 		panic(err)
 	}
 	brigdeStream.ApplyOperator(NewVehicleCounter("vehicle counter(shuffle grouping)", 2))
-	brigdeStream.SelectChannel("clone").ApplyOperator(NewVehicleCounter("vehicle counter(fields grouping)", 2, strategy.NewFieldGrouping()))
+	brigdeStream.SelectChannel("clone").ApplyOperator(NewVehicleCounter("vehicle counter(fields grouping)", 2, NewCarFiledStrategy()))
 
 	fmt.Println("This is a streaming job that has two counting operators linked to " + "\n" +
 		"the same input stream. One operator is hooked up to the default channel of " + "\n" +

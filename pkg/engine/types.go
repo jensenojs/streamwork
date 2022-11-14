@@ -82,14 +82,21 @@ type GroupStrategy interface {
 	GetInstance(event Event, parallelism int) int
 }
 
+type ShuffleGrouping interface {
+	GroupStrategy
+}
+
+type FieldGrouping interface {
+	GroupStrategy
+
+	GetKey(Event) string
+}
+
 // This is the base class for all the event classes.
 // Users should extend this class to implement all their own event classes.
 type Event interface {
 	// Get data stored in the event.
 	IsEvent()
-
-	// This method used to support filed_grouping
-	GetKey() string
 }
 
 // EventQueue is a interface for intemediate event queues between processes.

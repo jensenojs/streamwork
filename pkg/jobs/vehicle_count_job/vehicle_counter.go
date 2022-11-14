@@ -26,7 +26,7 @@ func NewVehicleCounter(name string, args ...any) *VehicleCounter {
 		v.Parallelism = args[0].(int)
 	case 2:
 		v.Parallelism = args[0].(int)
-		v.Strategy = (args[1].(engine.GroupStrategy)) // default strategy is round-robin
+		v.Strategy = args[1].(engine.GroupStrategy) // default strategy is round-robin
 	default:
 		panic("too many arguments for NewVehicleCounter")
 	}
@@ -37,7 +37,7 @@ func NewVehicleCounter(name string, args ...any) *VehicleCounter {
 // implement for Operator
 
 func (v *VehicleCounter) Apply(e engine.Event, _ engine.EventCollector) error {
-	typ := e.(*VehicleEvent).GetKey()
+	typ := e.(*VehicleEvent).Type
 	v.counter[typ] = v.counter[typ] + 1
 	v.printCountMap()
 	return nil
