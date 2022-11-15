@@ -1,6 +1,7 @@
 package fraud_detection_job
 
 import (
+	"fmt"
 	"streamwork/pkg/engine"
 	"streamwork/pkg/engine/operator"
 )
@@ -34,5 +35,6 @@ func (w *WindowedTransactionCountAnalyzer) Apply(e engine.Event, ev engine.Event
 		panic("should be transactionEvent")
 	}
 	ev.Add(NewTransactionSorceEvent(t, 0.0))
+	fmt.Printf("0.0")
 	return nil
 }

@@ -1,10 +1,12 @@
 package fraud_detection_job
 
 import (
+	"fmt"
 	"streamwork/pkg/engine"
 	"streamwork/pkg/engine/operator"
 )
 
+// WindowedProximityAnalyzer is a dummy analyzer. Allow all transactions.
 type WindowedProximityAnalyzer struct {
 	operator.Operator
 }
@@ -33,5 +35,6 @@ func (w *WindowedProximityAnalyzer) Apply(e engine.Event, ev engine.EventCollect
 		panic("should be transactionEvent")
 	}
 	ev.Add(NewTransactionSorceEvent(t, 0.0))
+	fmt.Printf("0.0")
 	return nil
 }

@@ -21,6 +21,6 @@ func (s *ScoreStorage) get(transaction string, defaultValue float64) float64 {
 }
 
 func (s *ScoreStorage) set(transaction string, Value float64) {
-	fmt.Printf("Transaction score change : "+"%s"+" ==> "+"%f\n", transaction, Value)
+	fmt.Printf("	Transaction score change : "+"%s"+" ==> "+"%f\n", transaction, Value)
 	s.transactionScores[transaction] = Value
 }

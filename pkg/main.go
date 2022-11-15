@@ -3,22 +3,36 @@ package main
 import (
 	"fmt"
 	"streamwork/pkg/engine/job"
-	"streamwork/pkg/jobs/vehicle_count_job"
+	"streamwork/pkg/engine/stream"
+	"streamwork/pkg/jobs/fraud_detection_job"
 )
 
-// // vehicle count job
+// fraud detection base test
 func main() {
-	vehicleJob := job.NewJob("vehicle count")
-	brigdeStream, err := vehicleJob.AddSource(vehicle_count_job.NewSensorReader("sensor-reader"))
+
+	fraudJob := job.NewJob("fraud detection base test")
+
+	transactionOut, err := fraudJob.AddSource(fraud_detection_job.NewTransactionSource("transaction source"))
 	if err != nil {
 		panic(err)
 	}
-	brigdeStream.ApplyOperator(vehicle_count_job.NewVehicleCounter("vehicle counter", 3))
 
-	fmt.Println("This is a streaming job that counts vehicles in real time. " +
-		"Please enter vehicle types like 'car' and 'truck' in the input terminal " +
-		"and look at the output")
+	// One stream can have multiple channels. Different operator can be hooked up
+	// to different channels to receive different events. When no channel is selected,
+	// the default channel will be used.
+	// All Analyzer are dummy, just pass all transactions, this job just just use to show stream fan-in and fan-out
+	evalResult1, err := transactionOut.ApplyOperator(fraud_detection_job.NewAvgTicketAnalyzer("avg ticket analyzer", 2, fraud_detection_job.NewCarFiledStrategy()))
 
-	starter := job.NewJobStarter(vehicleJob)
+	evalResult2, err := transactionOut.ApplyOperator(fraud_detection_job.NewWindowedProximityAnalyzer("windowed proximity analyzer", 2, fraud_detection_job.NewCarFiledStrategy()))
+
+	evalResult3, err := transactionOut.ApplyOperator(fraud_detection_job.NewWindowedTransactionCountAnalyzer("windowed transaction count analyzer", 2, fraud_detection_job.NewCarFiledStrategy()))
+
+	stream.Of(evalResult1, evalResult2, evalResult3).ApplyOperator(fraud_detection_job.NewScoreAggregator("score aggregator", 2, fraud_detection_job.NewTranIdFieldStrategy()))
+
+	fmt.Println("This is a streaming job that detect suspicious transactions." + "\n" +
+		"Input needs to be in this format: {amount},{merchandiseId}. For example: 42.00,3" + "\n" +
+		"Merchandises N and N + 1 are 1 seconds walking distance away from each other.")
+
+	starter := job.NewJobStarter(fraudJob)
 	starter.Start()
 }

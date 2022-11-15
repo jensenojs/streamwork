@@ -7,9 +7,10 @@ import (
 )
 
 const (
-	ConnHost = "localhost"
-	ConnType = "tcp"
-	ConnPort = 9990 //default port number
+	ConnHost  = "localhost"
+	ConnType  = "tcp"
+	ConnPort  = 9990 //default port number
+	ConnPort2 = 9990 + 10
 )
 
 type Source struct {

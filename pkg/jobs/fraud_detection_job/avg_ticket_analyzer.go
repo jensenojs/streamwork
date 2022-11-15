@@ -35,6 +35,6 @@ func (a *AvgTicketAnalyzer) Apply(e engine.Event, ev engine.EventCollector) erro
 		panic("should be transactionEvent")
 	}
 	ev.Add(NewTransactionSorceEvent(t, 0.0))
-	fmt.Printf("")
+	fmt.Printf("0.0")
 	return nil
 }
