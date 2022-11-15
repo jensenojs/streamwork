@@ -11,7 +11,7 @@ type UserAccountFieldStrategy struct {
 	strategy.FieldGrouping
 }
 
-func NewCarFiledStrategy() *UserAccountFieldStrategy {
+func NewUserAccountStrategy() *UserAccountFieldStrategy {
 	var ufs = new(UserAccountFieldStrategy)
 	ufs.Map = make(map[string]int)
 	ufs.CustomGetKey = ufs.GetKey
