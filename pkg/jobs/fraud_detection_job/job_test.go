@@ -1,4 +1,4 @@
-package fraud_detection_job
+package fraud_detection
 
 import (
 	"fmt"

@@ -1,5 +1,5 @@
 // run as debug in this test so printf can be shown in debug console
-package vehicle_count_job
+package vehicle_count
 
 import (
 	"fmt"

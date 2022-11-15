@@ -1,12 +1,13 @@
-package fraud_detection_job
+package fraud_detection
 
 import (
 	"fmt"
-	"github.com/google/uuid"
 	"strconv"
 	"streamwork/pkg/engine"
 	"streamwork/pkg/engine/source"
 	"strings"
+
+	"github.com/google/uuid"
 )
 
 type TransationSource struct {

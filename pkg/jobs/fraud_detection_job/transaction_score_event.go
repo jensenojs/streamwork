@@ -1,4 +1,4 @@
-package fraud_detection_job
+package fraud_detection
 
 // TransactionScoreEvent is a simple transaction event used in the fraud detection job.
 type TransactionScoreEvent struct {

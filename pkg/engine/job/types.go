@@ -9,7 +9,7 @@ import (
 // The Job class is used by users to set up their jobs and run.
 // Example:
 //
-//	Job job = new Job("my_job");
+//	Job job = new Job("my");
 //	job.addSource(mySource)
 //	   .applyOperator(myOperator);
 type Job struct {

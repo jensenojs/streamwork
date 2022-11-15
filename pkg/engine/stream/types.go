@@ -6,7 +6,7 @@ import "streamwork/pkg/engine"
 
 // Example:
 //
-//	Job job = new Job("my_job");
+//	Job job = new Job("my");
 //	job.addSource(mySource)
 //	   .applyOperator(myOperator);
 type Stream struct {
@@ -20,7 +20,7 @@ type Streams struct {
 
 // Example:
 //
-//	Job job = new Job("my_job");
+//	Job job = new Job("my");
 //	job.addSource(mySource)
 //	   .selectChannel("my_channel")
 //	   .applyOperator(myOperator);
