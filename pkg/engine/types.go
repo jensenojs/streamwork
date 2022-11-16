@@ -41,8 +41,7 @@ type Operator interface {
 type Source interface {
 	Component
 
-	// Accept events from external into the system.  The function is abstract and needs to be implemented by users.
-	// GetEvents([]byte, int, EventCollector)
+	// Accept events from external into the system.  The function is abstract and needs to be implemented by users. The first argument actually is event, just encode as string
 	GetEvents(string, EventCollector)
 }
 
