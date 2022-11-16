@@ -14,6 +14,7 @@ type Stream struct {
 	OperatorMap map[engine.Channel]map[engine.Operator]engine.Void
 }
 
+// Streams will be used in stream-graph, like split and merge
 type Streams struct {
 	array []engine.Stream
 }
@@ -27,4 +28,15 @@ type Streams struct {
 type StreamChannel struct {
 	channel    engine.Channel
 	basestream *Stream
+}
+
+// Example:
+//
+//	Job job = new Job("my_job");
+//	job.addSource(mySource)
+//	   .withWindowing(new FixedTimeWindowingStrategy(1000, 1000))
+//	   .applyOperator(myOperator);
+type WindowedStream struct {
+	windowingStrategy engine.GroupStrategy
+	basestream        *Stream
 }

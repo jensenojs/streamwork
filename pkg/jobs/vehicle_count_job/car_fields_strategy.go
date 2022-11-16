@@ -2,11 +2,11 @@ package vehicle_count
 
 import (
 	"streamwork/pkg/engine"
-	"streamwork/pkg/engine/transport/strategy"
+	"streamwork/pkg/engine/transport/strategy/groupstrategy"
 )
 
 type CarFiledStrategy struct {
-	strategy.FieldGrouping
+	groupstrategy.FieldGrouping
 }
 
 func NewCarFiledStrategy() *CarFiledStrategy {

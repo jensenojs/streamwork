@@ -1,7 +1,6 @@
-package strategy
+package groupstrategy
 
 import (
-	// "reflect"
 	"streamwork/pkg/engine"
 )
 

@@ -1,4 +1,4 @@
-package strategy
+package groupstrategy
 
 import "streamwork/pkg/engine"
 

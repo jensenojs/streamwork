@@ -2,7 +2,7 @@ package operator
 
 import (
 	"streamwork/pkg/engine"
-	"streamwork/pkg/engine/transport/strategy"
+	"streamwork/pkg/engine/transport/strategy/groupstrategy"
 
 	"github.com/huandu/go-clone"
 )
@@ -13,7 +13,7 @@ func NewOperatorExecutor(op engine.Operator) *OperatorExecutor {
 	oe.Parallelism = op.GetParallelism()
 	s := op.GetGroupingStrategy()
 	if s == nil {
-		oe.gs = strategy.NewShuffleGrouping()
+		oe.gs = groupstrategy.NewShuffleGrouping()
 	} else {
 		oe.gs = s
 	}

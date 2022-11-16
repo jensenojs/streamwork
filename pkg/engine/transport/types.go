@@ -3,6 +3,7 @@ package transport
 import (
 	"streamwork/pkg/engine"
 	"streamwork/pkg/engine/operator"
+	"time"
 )
 
 // EventDispatcher is responsible for transporting events from
@@ -14,9 +15,14 @@ type EventDispatcher struct {
 	outgoings          []engine.EventQueue
 }
 
-/**
- * This is the class for intemediate event queues between processes.
- */
+// EventQueue is responsible for intemediate event queues between processes.
 type EventQueue struct {
 	Queue chan engine.Event
+}
+
+// EventWindow is responsible for collect event into a window
+type EventWindow struct {
+	List  []engine.Event
+	start time.Time
+	end   time.Time
 }

@@ -3,12 +3,12 @@ package fraud_detection
 import (
 	"strconv"
 	"streamwork/pkg/engine"
-	"streamwork/pkg/engine/transport/strategy"
+	"streamwork/pkg/engine/transport/strategy/groupstrategy"
 )
 
 // define another filed_grouping strategy here, using userAccount but not Id
 type UserAccountFieldStrategy struct {
-	strategy.FieldGrouping
+	groupstrategy.FieldGrouping
 }
 
 func NewUserAccountStrategy() *UserAccountFieldStrategy {

@@ -2,11 +2,11 @@ package system_usage
 
 import (
 	"streamwork/pkg/engine"
-	"streamwork/pkg/engine/transport/strategy"
+	"streamwork/pkg/engine/transport/strategy/groupstrategy"
 )
 
 type TranIdFieldStrategy struct {
-	strategy.FieldGrouping
+	groupstrategy.FieldGrouping
 }
 
 func NewTranIdFieldStrategy() *TranIdFieldStrategy {
