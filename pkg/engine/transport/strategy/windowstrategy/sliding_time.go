@@ -7,24 +7,24 @@ import (
 )
 
 type SlidingTimeWindow struct {
-	Le time.Duration // Length of each window in milli seconds.
-	In time.Duration // Interval between two adjacent windows. For fixed windows, interval should be equivalent to length.
-	Wa time.Duration // Extra wait time before window closing. A window should be closed when the current *processing time* is greater than the window end time (event time based) plus an extra watermark time.
+	le time.Duration // Length of each window in milli seconds.
+	in time.Duration // Interval between two adjacent windows. For fixed windows, interval should be equivalent to length.
+	wa time.Duration // Extra wait time before window closing. A window should be closed when the current *processing time* is greater than the window end time (event time based) plus an extra watermark time.
 
-	eventWindows map[time.Time]engine.EventWindow // Keep track of multiple event windows. Because of sliding and watermark, there could be multiple event windows existing in a strategy.
+	EventWindows map[time.Time]engine.EventWindow // Keep track of multiple event windows. Because of sliding and watermark, there could be multiple event windows existing in a strategy.
 }
 
 func NewSlidingTimeWindow(lengthMillis, intervalMillis, watermarkMillis time.Duration) *SlidingTimeWindow {
 	return &SlidingTimeWindow{
-		Le:           lengthMillis,
-		In:           intervalMillis,
-		Wa:           watermarkMillis,
-		eventWindows: make(map[time.Time]engine.EventWindow),
+		le:           lengthMillis,
+		in:           intervalMillis,
+		wa:           watermarkMillis,
+		EventWindows: make(map[time.Time]engine.EventWindow),
 	}
 }
 
 func (w *SlidingTimeWindow) IsLateEvent(eventTime, processTime time.Time) bool {
-	return processTime.After(eventTime.Add(w.Le).Add(w.Wa))
+	return processTime.After(eventTime.Add(w.le).Add(w.wa))
 }
 
 func (w *SlidingTimeWindow) Add(e engine.Event, pt time.Time) {
@@ -37,15 +37,15 @@ func (w *SlidingTimeWindow) Add(e engine.Event, pt time.Time) {
 			mostRecentStart := et
 			start := mostRecentStart
 			for {
-				if et.After(start.Add(w.Le)) || et.Equal(start.Add(w.Le)) {
+				if et.After(start.Add(w.le)) || et.Equal(start.Add(w.le)) {
 					break
 				}
-				ew, ok := w.eventWindows[start]
+				ew, ok := w.EventWindows[start]
 				if !ok {
-					w.eventWindows[start] = transport.NewEventWindow(start, start.Add(w.Le))
+					w.EventWindows[start] = transport.NewEventWindow(start, start.Add(w.le))
 				}
 				ew.Add(e)
-				start.Add(-w.In)
+				start.Add(-w.in)
 			}
 		}
 	}
@@ -55,15 +55,15 @@ func (w *SlidingTimeWindow) Add(e engine.Event, pt time.Time) {
 func (w *SlidingTimeWindow) GetEventWindows(processTime time.Time) []engine.EventWindow {
 	// Return that windows that are ready to be processed. Typically there should be zero or one window.
 	toProcess := make([]engine.EventWindow, 0)
-	for startTime, v := range w.eventWindows {
-		if processTime.After(startTime.Add(w.Le).Add(w.Wa)) {
+	for startTime, v := range w.EventWindows {
+		if processTime.After(startTime.Add(w.le).Add(w.wa)) {
 			toProcess = append(toProcess, v)
 		}
 	}
 
 	// clean up
 	for _, k := range toProcess {
-		delete(w.eventWindows, k.GetStartTime())
+		delete(w.EventWindows, k.GetStartTime())
 	}
 
 	return toProcess
