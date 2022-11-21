@@ -44,6 +44,16 @@ type Operator interface {
 	GetGroupingStrategy() GroupStrategy
 }
 
+type WindowOperator interface {
+	Component
+
+	//  Apply logic to the incoming event and generate results.The function is abstract and needs to be implemented by users.
+	Apply(EventWindow, EventCollector) error
+
+	// If you don't want to set WindowStrategy, just return nil
+	GetWindowingStrategy() WindowStrategy
+}
+
 // Source is a interface for all user defined sources.
 type Source interface {
 	Component
@@ -94,7 +104,7 @@ type GroupStrategy interface {
 	GetInstance(event Event, parallelism int) int
 }
 
-type WindowingStrategy interface {
+type WindowStrategy interface {
 	// Add an event into the windowing strategy. Note that all calculation in this function are event time
 	// based, except the logic to check the event is a late event or not.
 	Add(Event, time.Time)

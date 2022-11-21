@@ -37,6 +37,6 @@ type StreamChannel struct {
 //	   .withWindowing(new FixedTimeWindowingStrategy(1000, 1000))
 //	   .applyOperator(myOperator);
 type WindowedStream struct {
-	windowingStrategy engine.GroupStrategy
+	windowingStrategy engine.WindowStrategy
 	basestream        *Stream
 }

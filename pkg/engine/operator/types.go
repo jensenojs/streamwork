@@ -10,6 +10,11 @@ type Operator struct {
 	Strategy engine.GroupStrategy
 }
 
+type WindowOperator struct {
+	component.Component
+	Strategy engine.WindowStrategy
+}
+
 // The executor for operator components. When the executor is started,
 // a new thread is created to call the apply() function of
 // the operator component repeatedly.

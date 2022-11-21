@@ -34,8 +34,16 @@ func (s *Stream) applyOperator(ch engine.Channel, op engine.Operator) (engine.St
 	return op.GetOutgoingStream(), nil
 }
 
+func (s *Stream) applyWindowOperator(op engine.WindowOperator, ws engine.WindowStrategy) (engine.Stream, error) {
+	// wo := 
+}
+
 func (s *Stream) SelectChannel(ch engine.Channel) engine.Stream {
 	return NewStreamChannel(s, ch)
+}
+
+func (s *Stream) WithWindowing(ws engine.WindowStrategy) *WindowedStream {
+	return NewWindowedStream(s, ws)
 }
 
 // Get the channels in the stream. Note that the channel set
